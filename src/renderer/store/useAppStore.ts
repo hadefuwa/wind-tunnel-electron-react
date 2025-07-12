@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { defaultSimulationService, SimulationConfig } from '../services/SimulationService';
 
 export interface WindTunnelData {
   dragCoefficient: number;
@@ -23,6 +24,10 @@ interface AppState {
   updateRate: number; // milliseconds
   theme: 'dark' | 'light' | 'auto';
   
+  // Simulation
+  isSimulationRunning: boolean;
+  simulationConfig: SimulationConfig;
+  
   // Actions
   setMode: (mode: 'simulation' | 'spi') => void;
   setConnectionStatus: (connected: boolean) => void;
@@ -30,6 +35,9 @@ interface AppState {
   setUpdateRate: (rate: number) => void;
   setTheme: (theme: 'dark' | 'light' | 'auto') => void;
   clearDataHistory: () => void;
+  startSimulation: () => void;
+  stopSimulation: () => void;
+  updateSimulationConfig: (config: Partial<SimulationConfig>) => void;
 }
 
 const initialData: WindTunnelData = {
@@ -42,6 +50,16 @@ const initialData: WindTunnelData = {
   timestamp: new Date(),
 };
 
+const initialSimulationConfig: SimulationConfig = {
+  windSpeed: 25,
+  modelType: 'car',
+  angleOfAttack: 0,
+  temperature: 22.5,
+  pressure: 101.3,
+  humidity: 50,
+  turbulence: 0.1,
+};
+
 export const useAppStore = create<AppState>((set, get) => ({
   // Initial state
   mode: 'simulation',
@@ -50,6 +68,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   dataHistory: [initialData],
   updateRate: 100,
   theme: 'dark',
+  isSimulationRunning: false,
+  simulationConfig: initialSimulationConfig,
   
   // Actions
   setMode: (mode) => set({ mode }),
@@ -71,4 +91,25 @@ export const useAppStore = create<AppState>((set, get) => ({
   setTheme: (theme) => set({ theme }),
   
   clearDataHistory: () => set({ dataHistory: [] }),
+  
+  startSimulation: () => {
+    const { updateRate, simulationConfig } = get();
+    defaultSimulationService.updateConfig(simulationConfig);
+    defaultSimulationService.start((data) => {
+      get().updateData(data);
+    }, updateRate);
+    set({ isSimulationRunning: true });
+  },
+  
+  stopSimulation: () => {
+    defaultSimulationService.stop();
+    set({ isSimulationRunning: false });
+  },
+  
+  updateSimulationConfig: (config) => {
+    const { simulationConfig } = get();
+    const newConfig = { ...simulationConfig, ...config };
+    set({ simulationConfig: newConfig });
+    defaultSimulationService.updateConfig(newConfig);
+  },
 })); 

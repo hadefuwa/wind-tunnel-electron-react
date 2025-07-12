@@ -1,9 +1,17 @@
 import React from 'react';
 import ParameterCard from './ParameterCard';
+import RealTimeChart from './RealTimeChart';
 import { useAppStore } from '../../store/useAppStore';
+import { PlayIcon, StopIcon } from '@heroicons/react/24/solid';
 
 export default function Dashboard() {
-  const { currentData } = useAppStore();
+  const { 
+    currentData, 
+    dataHistory, 
+    isSimulationRunning, 
+    startSimulation, 
+    stopSimulation 
+  } = useAppStore();
 
   const parameters = currentData ? [
     { name: 'Drag Coefficient', value: currentData.dragCoefficient.toFixed(2), unit: 'Cd', trend: 'up' as const, color: 'primary' as const },
@@ -28,14 +36,54 @@ export default function Dashboard() {
         ))}
       </div>
 
+      {/* Simulation Controls */}
+      <div className="bg-background-800 rounded-lg p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold">Simulation Controls</h3>
+          <div className="flex space-x-2">
+            <button
+              onClick={startSimulation}
+              disabled={isSimulationRunning}
+              className="flex items-center px-4 py-2 bg-success-600 hover:bg-success-700 disabled:bg-success-800 disabled:cursor-not-allowed rounded-lg text-white font-medium transition-colors"
+            >
+              <PlayIcon className="h-4 w-4 mr-2" />
+              Start
+            </button>
+            <button
+              onClick={stopSimulation}
+              disabled={!isSimulationRunning}
+              className="flex items-center px-4 py-2 bg-error-600 hover:bg-error-700 disabled:bg-error-800 disabled:cursor-not-allowed rounded-lg text-white font-medium transition-colors"
+            >
+              <StopIcon className="h-4 w-4 mr-2" />
+              Stop
+            </button>
+          </div>
+        </div>
+        <div className="text-sm text-background-400">
+          Status: {isSimulationRunning ? 'Running' : 'Stopped'} | 
+          Data Points: {dataHistory.length} | 
+          Last Update: {currentData?.timestamp.toLocaleTimeString() || 'N/A'}
+        </div>
+      </div>
+
       {/* Charts and Visualization */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Real-time Charts */}
-        <div className="bg-background-800 rounded-lg p-6">
-          <h3 className="text-lg font-semibold mb-4">Real-time Charts</h3>
-          <div className="h-64 bg-background-700 rounded flex items-center justify-center">
-            <p className="text-background-400">Chart.js integration coming soon...</p>
-          </div>
+        <div className="space-y-4">
+          <RealTimeChart
+            data={dataHistory}
+            parameter="dragCoefficient"
+            title="Drag Coefficient"
+            color="#3b82f6"
+            unit="Cd"
+          />
+          <RealTimeChart
+            data={dataHistory}
+            parameter="velocity"
+            title="Wind Velocity"
+            color="#f97316"
+            unit="m/s"
+          />
         </div>
 
         {/* 3D Visualization */}
