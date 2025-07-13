@@ -1,5 +1,5 @@
 import { WebSocketServer, WebSocket } from 'ws';
-import { WindTunnelData } from '../../renderer/store/useAppStore';
+import { WindTunnelData } from '../../shared/types/WindTunnelData';
 
 export interface WebSocketMessage {
   type: 'data' | 'status' | 'config' | 'command' | 'error';
@@ -13,7 +13,7 @@ export class WebSocketService {
   private port: number;
   private isRunning: boolean = false;
 
-  constructor(port: number = 8080) {
+  constructor(port: number = 8081) {
     this.port = port;
   }
 
@@ -204,4 +204,4 @@ export class WebSocketService {
 }
 
 // Default WebSocket service instance
-export const defaultWebSocketService = new WebSocketService(8080); 
+export const defaultWebSocketService = new WebSocketService(8081); 

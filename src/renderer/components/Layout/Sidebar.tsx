@@ -5,12 +5,14 @@ import {
   Cog6ToothIcon,
   ChartBarIcon,
   CubeIcon,
-  ExclamationTriangleIcon
+  ExclamationTriangleIcon,
+  ComputerDesktopIcon
 } from '@heroicons/react/24/outline';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon },
   { name: 'Settings', href: '/settings', icon: Cog6ToothIcon },
+  { name: 'WebGL Test', href: '/webgl-test', icon: ComputerDesktopIcon },
 ];
 
 const quickStats = [

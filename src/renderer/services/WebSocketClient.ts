@@ -1,4 +1,4 @@
-import { WindTunnelData } from '../store/useAppStore';
+import { WindTunnelData } from '../../shared/types/WindTunnelData';
 
 export interface WebSocketMessage {
   type: 'data' | 'status' | 'config' | 'command' | 'error';
@@ -21,7 +21,7 @@ export class WebSocketClient {
   private messageHandlers: Map<string, ((payload: any) => void)[]> = new Map();
 
   constructor(config: WebSocketClientConfig = {
-    url: 'ws://localhost:8080',
+    url: 'ws://localhost:8081',
     reconnectInterval: 5000,
     maxReconnectAttempts: 10
   }) {
@@ -49,7 +49,7 @@ export class WebSocketClient {
           resolve();
         };
 
-        this.ws.onmessage = (event) => {
+        this.ws.onmessage = (event: MessageEvent) => {
           try {
             const message: WebSocketMessage = JSON.parse(event.data);
             this.handleMessage(message);
@@ -58,13 +58,13 @@ export class WebSocketClient {
           }
         };
 
-        this.ws.onclose = (event) => {
+        this.ws.onclose = (event: CloseEvent) => {
           console.log('WebSocket disconnected:', event.code, event.reason);
           this.isConnecting = false;
           this.handleDisconnect();
         };
 
-        this.ws.onerror = (error) => {
+        this.ws.onerror = (error: Event) => {
           console.error('WebSocket error:', error);
           this.isConnecting = false;
           reject(error);

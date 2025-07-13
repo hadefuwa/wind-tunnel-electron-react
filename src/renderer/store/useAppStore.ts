@@ -1,16 +1,7 @@
 import { create } from 'zustand';
 import { defaultSimulationService, SimulationConfig } from '../services/SimulationService';
 import { defaultWebSocketClient } from '../services/WebSocketClient';
-
-export interface WindTunnelData {
-  dragCoefficient: number;
-  liftCoefficient: number;
-  reynoldsNumber: number;
-  velocity: number;
-  pressure: number;
-  temperature: number;
-  timestamp: Date;
-}
+import { WindTunnelData } from '../../shared/types/WindTunnelData';
 
 interface AppState {
   // Mode and Connection
@@ -46,13 +37,40 @@ interface AppState {
 }
 
 const initialData: WindTunnelData = {
-  dragCoefficient: 0.32,
-  liftCoefficient: 0.15,
-  reynoldsNumber: 1200000,
-  velocity: 25.0,
-  pressure: 101.3,
+  timestamp: Date.now(),
+  windSpeed: 25.0,
   temperature: 22.5,
-  timestamp: new Date(),
+  humidity: 50,
+  pressure: 101.3,
+  dragForce: 0.32,
+  liftForce: 0.15,
+  reynoldsNumber: 1200000,
+  machNumber: 0.073,
+  angleOfAttack: 0,
+  modelPosition: { x: 0, y: 0, z: 0 },
+  modelRotation: { x: 0, y: 0, z: 0 },
+  sensorReadings: {
+    strainGauge1: 0.32,
+    strainGauge2: 0.28,
+    strainGauge3: 0.31,
+    strainGauge4: 0.29,
+    pressureSensor1: 101.3,
+    pressureSensor2: 101.1,
+    pressureSensor3: 101.4,
+    pressureSensor4: 101.2,
+  },
+  environmentalFactors: {
+    airDensity: 1.225,
+    dynamicViscosity: 1.81e-5,
+    speedOfSound: 343.2,
+  },
+  simulationConfig: {
+    scenario: 'standard',
+    modelType: 'car',
+    windTunnelLength: 10,
+    windTunnelWidth: 2,
+    windTunnelHeight: 2,
+  },
 };
 
 const initialSimulationConfig: SimulationConfig = {

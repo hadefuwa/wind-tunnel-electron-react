@@ -13,9 +13,9 @@ export const WebGLFallback: React.FC<WebGLFallbackProps> = ({ className = '' }) 
       <div className="absolute top-4 left-4 z-10 bg-gray-900/80 backdrop-blur-sm rounded-lg p-3">
         <h3 className="text-white font-semibold mb-2">2D Wind Tunnel View</h3>
         <div className="text-sm text-gray-300 space-y-1">
-          <div>Velocity: {currentData?.velocity.toFixed(1) || '0.0'} m/s</div>
-          <div>Drag: {currentData?.dragCoefficient.toFixed(3) || '0.000'} </div>
-          <div>Lift: {currentData?.liftCoefficient.toFixed(3) || '0.000'} </div>
+          <div>Velocity: {currentData?.windSpeed?.toFixed(1) ?? '0.0'} m/s</div>
+          <div>Drag: {currentData?.dragForce?.toFixed(3) ?? '0.000'} </div>
+          <div>Lift: {currentData?.liftForce?.toFixed(3) ?? '0.000'} </div>
         </div>
       </div>
       
@@ -51,7 +51,7 @@ export const WebGLFallback: React.FC<WebGLFallbackProps> = ({ className = '' }) 
             
             {/* Wind direction indicator */}
             <div className="absolute top-2 right-2 text-xs text-blue-400">
-              → {currentData?.velocity.toFixed(0) || '0'} m/s
+              → {currentData?.windSpeed?.toFixed(0) ?? '0'} m/s
             </div>
           </div>
           
@@ -64,20 +64,20 @@ export const WebGLFallback: React.FC<WebGLFallbackProps> = ({ className = '' }) 
           {/* Data summary */}
           <div className="grid grid-cols-2 gap-4 text-xs">
             <div className="bg-gray-800/50 rounded p-2">
-              <div className="text-gray-400">Drag Coeff</div>
-              <div className="text-white font-mono">{currentData?.dragCoefficient.toFixed(3) || '0.000'}</div>
+              <div className="text-gray-400">Drag Force</div>
+              <div className="text-white font-mono">{currentData?.dragForce?.toFixed(3) ?? '0.000'}</div>
             </div>
             <div className="bg-gray-800/50 rounded p-2">
-              <div className="text-gray-400">Lift Coeff</div>
-              <div className="text-white font-mono">{currentData?.liftCoefficient.toFixed(3) || '0.000'}</div>
+              <div className="text-gray-400">Lift Force</div>
+              <div className="text-white font-mono">{currentData?.liftForce?.toFixed(3) ?? '0.000'}</div>
             </div>
             <div className="bg-gray-800/50 rounded p-2">
               <div className="text-gray-400">Pressure</div>
-              <div className="text-white font-mono">{currentData?.pressure.toFixed(1) || '0.0'} kPa</div>
+              <div className="text-white font-mono">{currentData?.pressure?.toFixed(1) ?? '0.0'} kPa</div>
             </div>
             <div className="bg-gray-800/50 rounded p-2">
               <div className="text-gray-400">Temperature</div>
-              <div className="text-white font-mono">{currentData?.temperature.toFixed(1) || '0.0'}°C</div>
+              <div className="text-white font-mono">{currentData?.temperature?.toFixed(1) ?? '0.0'}°C</div>
             </div>
           </div>
         </div>

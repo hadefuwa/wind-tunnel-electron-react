@@ -1,4 +1,4 @@
-import { WindTunnelData } from '../store/useAppStore';
+import { WindTunnelData } from '../../shared/types/WindTunnelData';
 
 export interface SimulationConfig {
   windSpeed: number; // m/s
@@ -66,14 +66,49 @@ export class SimulationService {
     const temperatureVariation = Math.sin(time * 0.1) * 0.5;
     const pressureVariation = Math.cos(time * 0.05) * 0.2;
     
+    // Calculate Mach number
+    const speedOfSound = 343.2; // m/s at 20°C
+    const machNumber = windSpeed / speedOfSound;
+    
+    // Calculate forces (simplified)
+    const dragForce = dragCoeff * 0.5 * 1.225 * windSpeed * windSpeed;
+    const liftForce = liftCoeff * 0.5 * 1.225 * windSpeed * windSpeed;
+    
     return {
-      dragCoefficient: dragCoeff + noise.drag * turbulence,
-      liftCoefficient: liftCoeff + noise.lift * turbulence,
-      reynoldsNumber: reynoldsNumber + noise.reynolds * 10000,
-      velocity: windSpeed + noise.velocity * 2,
-      pressure: this.config.pressure + pressureVariation + noise.pressure,
+      timestamp: Date.now(),
+      windSpeed: windSpeed + noise.velocity * 2,
       temperature: this.config.temperature + temperatureVariation + noise.temperature,
-      timestamp: new Date(),
+      humidity: this.config.humidity,
+      pressure: this.config.pressure + pressureVariation + noise.pressure,
+      dragForce: dragForce + noise.drag * turbulence,
+      liftForce: liftForce + noise.lift * turbulence,
+      reynoldsNumber: reynoldsNumber + noise.reynolds * 10000,
+      machNumber: machNumber,
+      angleOfAttack: this.config.angleOfAttack,
+      modelPosition: { x: 0, y: 0, z: 0 },
+      modelRotation: { x: 0, y: 0, z: 0 },
+      sensorReadings: {
+        strainGauge1: dragForce * 0.25 + noise.drag * 0.1,
+        strainGauge2: dragForce * 0.25 + noise.drag * 0.1,
+        strainGauge3: dragForce * 0.25 + noise.drag * 0.1,
+        strainGauge4: dragForce * 0.25 + noise.drag * 0.1,
+        pressureSensor1: this.config.pressure + pressureVariation * 0.5,
+        pressureSensor2: this.config.pressure + pressureVariation * 0.3,
+        pressureSensor3: this.config.pressure + pressureVariation * 0.7,
+        pressureSensor4: this.config.pressure + pressureVariation * 0.4,
+      },
+      environmentalFactors: {
+        airDensity: 1.225,
+        dynamicViscosity: 1.81e-5,
+        speedOfSound: speedOfSound,
+      },
+      simulationConfig: {
+        scenario: 'standard',
+        modelType: this.config.modelType,
+        windTunnelLength: 10,
+        windTunnelWidth: 2,
+        windTunnelHeight: 2,
+      },
     };
   }
 

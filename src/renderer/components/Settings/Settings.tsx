@@ -3,12 +3,15 @@ import {
   Cog6ToothIcon,
   WifiIcon,
   ChartBarIcon,
-  CubeIcon
+  CubeIcon,
+  UserIcon
 } from '@heroicons/react/24/outline';
 import { SPIConfig } from './SPIConfig';
+import UserPreferences from './UserPreferences';
 
 const tabs = [
   { name: 'General', icon: Cog6ToothIcon },
+  { name: 'User Preferences', icon: UserIcon },
   { name: 'SPI Configuration', icon: WifiIcon },
   { name: 'Simulation', icon: ChartBarIcon },
   { name: 'Visualization', icon: CubeIcon },
@@ -78,6 +81,8 @@ export default function Settings() {
             </div>
           </div>
         )}
+
+        {activeTab === 'User Preferences' && <UserPreferences />}
 
         {activeTab === 'SPI Configuration' && <SPIConfig />}
 
