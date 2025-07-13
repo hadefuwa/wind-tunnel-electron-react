@@ -1,6 +1,7 @@
 import React from 'react';
 import ParameterCard from './ParameterCard';
 import RealTimeChart from './RealTimeChart';
+import { WindTunnel3D } from '../Visualization/WindTunnel3D';
 import { useAppStore } from '../../store/useAppStore';
 import { PlayIcon, StopIcon } from '@heroicons/react/24/solid';
 
@@ -89,8 +90,8 @@ export default function Dashboard() {
         {/* 3D Visualization */}
         <div className="bg-background-800 rounded-lg p-6">
           <h3 className="text-lg font-semibold mb-4">3D Visualization</h3>
-          <div className="h-64 bg-background-700 rounded flex items-center justify-center">
-            <p className="text-background-400">Three.js integration coming soon...</p>
+          <div className="h-64">
+            <WindTunnel3D className="h-full" />
           </div>
         </div>
       </div>
