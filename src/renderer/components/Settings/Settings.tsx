@@ -5,6 +5,7 @@ import {
   ChartBarIcon,
   CubeIcon
 } from '@heroicons/react/24/outline';
+import { SPIConfig } from './SPIConfig';
 
 const tabs = [
   { name: 'General', icon: Cog6ToothIcon },
@@ -78,43 +79,7 @@ export default function Settings() {
           </div>
         )}
 
-        {activeTab === 'SPI Configuration' && (
-          <div className="space-y-6">
-            <h3 className="text-lg font-semibold">SPI Configuration</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-background-300 mb-2">
-                  SPI Mode
-                </label>
-                <select className="w-full bg-background-700 border border-background-600 rounded-lg px-3 py-2 text-white">
-                  <option>Mode 0</option>
-                  <option>Mode 1</option>
-                  <option>Mode 2</option>
-                  <option>Mode 3</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-background-300 mb-2">
-                  Clock Speed
-                </label>
-                <select className="w-full bg-background-700 border border-background-600 rounded-lg px-3 py-2 text-white">
-                  <option>1 MHz</option>
-                  <option>500 kHz</option>
-                  <option>100 kHz</option>
-                  <option>10 kHz</option>
-                </select>
-              </div>
-            </div>
-            <div className="flex space-x-4">
-              <button className="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-white font-medium">
-                Test Connection
-              </button>
-              <button className="bg-background-700 hover:bg-background-600 px-4 py-2 rounded-lg text-white font-medium">
-                Save Configuration
-              </button>
-            </div>
-          </div>
-        )}
+        {activeTab === 'SPI Configuration' && <SPIConfig />}
 
         {activeTab === 'Simulation' && (
           <div className="space-y-6">
