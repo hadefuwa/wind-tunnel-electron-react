@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { defaultSimulationService, SimulationConfig } from '../services/SimulationService';
+import { defaultWebSocketClient } from '../services/WebSocketClient';
 
 export interface WindTunnelData {
   dragCoefficient: number;
@@ -15,6 +16,7 @@ interface AppState {
   // Mode and Connection
   mode: 'simulation' | 'spi';
   isConnected: boolean;
+  websocketConnected: boolean;
   
   // Data
   currentData: WindTunnelData | null;
@@ -31,6 +33,7 @@ interface AppState {
   // Actions
   setMode: (mode: 'simulation' | 'spi') => void;
   setConnectionStatus: (connected: boolean) => void;
+  setWebSocketStatus: (connected: boolean) => void;
   updateData: (data: WindTunnelData) => void;
   setUpdateRate: (rate: number) => void;
   setTheme: (theme: 'dark' | 'light' | 'auto') => void;
@@ -38,6 +41,8 @@ interface AppState {
   startSimulation: () => void;
   stopSimulation: () => void;
   updateSimulationConfig: (config: Partial<SimulationConfig>) => void;
+  connectWebSocket: () => Promise<void>;
+  disconnectWebSocket: () => void;
 }
 
 const initialData: WindTunnelData = {
@@ -64,6 +69,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   // Initial state
   mode: 'simulation',
   isConnected: false,
+  websocketConnected: false,
   currentData: initialData,
   dataHistory: [initialData],
   updateRate: 100,
@@ -111,5 +117,36 @@ export const useAppStore = create<AppState>((set, get) => ({
     const newConfig = { ...simulationConfig, ...config };
     set({ simulationConfig: newConfig });
     defaultSimulationService.updateConfig(newConfig);
+  },
+
+  setWebSocketStatus: (connected) => set({ websocketConnected: connected }),
+
+  connectWebSocket: async () => {
+    try {
+      await defaultWebSocketClient.connect();
+      
+      // Set up message handlers
+      defaultWebSocketClient.on('data', (data: WindTunnelData) => {
+        get().updateData(data);
+      });
+
+      defaultWebSocketClient.on('status', (status) => {
+        console.log('WebSocket status:', status);
+      });
+
+      defaultWebSocketClient.on('error', (error) => {
+        console.error('WebSocket error:', error);
+      });
+
+      set({ websocketConnected: true });
+    } catch (error) {
+      console.error('Failed to connect WebSocket:', error);
+      set({ websocketConnected: false });
+    }
+  },
+
+  disconnectWebSocket: () => {
+    defaultWebSocketClient.disconnect();
+    set({ websocketConnected: false });
   },
 })); 

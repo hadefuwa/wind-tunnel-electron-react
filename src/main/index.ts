@@ -1,5 +1,7 @@
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
+import { defaultWebSocketService } from './services/WebSocketServer';
+import { defaultSimulationService } from '../renderer/services/SimulationService';
 
 // Handle GPU process crashes
 app.commandLine.appendSwitch('--disable-gpu-sandbox');
@@ -41,7 +43,15 @@ function createWindow() {
   win.once('ready-to-show', () => win.show());
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  // Start WebSocket server
+  try {
+    await defaultWebSocketService.start();
+    console.log('WebSocket server started successfully');
+  } catch (error) {
+    console.error('Failed to start WebSocket server:', error);
+  }
+
   createWindow();
 
   app.on('activate', () => {
@@ -50,5 +60,8 @@ app.whenReady().then(() => {
 });
 
 app.on('window-all-closed', () => {
+  // Stop WebSocket server
+  defaultWebSocketService.stop();
+  
   if (process.platform !== 'darwin') app.quit();
 }); 
