@@ -2,6 +2,7 @@ import React from 'react';
 import ParameterCard from './ParameterCard';
 import RealTimeChart from './RealTimeChart';
 import { WindTunnel3D } from '../Visualization/WindTunnel3D';
+import { ErrorBoundary } from '../ErrorBoundary';
 import { useAppStore } from '../../store/useAppStore';
 import { PlayIcon, StopIcon } from '@heroicons/react/24/solid';
 
@@ -91,7 +92,9 @@ export default function Dashboard() {
         <div className="bg-background-800 rounded-lg p-6">
           <h3 className="text-lg font-semibold mb-4">3D Visualization</h3>
           <div className="h-64">
-            <WindTunnel3D className="h-full" />
+            <ErrorBoundary>
+              <WindTunnel3D className="h-full" />
+            </ErrorBoundary>
           </div>
         </div>
       </div>

@@ -1,6 +1,14 @@
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
 
+// Handle GPU process crashes
+app.commandLine.appendSwitch('--disable-gpu-sandbox');
+app.commandLine.appendSwitch('--disable-software-rasterizer');
+app.commandLine.appendSwitch('--disable-dev-shm-usage');
+app.commandLine.appendSwitch('--no-sandbox');
+app.commandLine.appendSwitch('--disable-web-security');
+app.commandLine.appendSwitch('--allow-running-insecure-content');
+
 const isDev = !app.isPackaged;
 
 function createWindow() {
@@ -14,6 +22,11 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
       contextIsolation: true,
+      webSecurity: true,
+      allowRunningInsecureContent: false,
+      experimentalFeatures: false,
+      // Enable WebGL
+      webgl: true,
     },
     show: false,
   });

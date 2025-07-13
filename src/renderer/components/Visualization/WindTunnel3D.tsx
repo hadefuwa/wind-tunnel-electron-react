@@ -1,6 +1,7 @@
-import React, { useRef, useEffect, useMemo } from 'react';
+import React, { useRef, useEffect, useMemo, useState } from 'react';
 import * as THREE from 'three';
 import { useAppStore } from '../../store/useAppStore';
+import { WebGLFallback } from './WebGLFallback';
 
 interface WindTunnel3DProps {
   className?: string;
@@ -14,6 +15,7 @@ export const WindTunnel3D: React.FC<WindTunnel3DProps> = ({ className = '' }) =>
   const carRef = useRef<THREE.Group | null>(null);
   const windParticlesRef = useRef<THREE.Points | null>(null);
   const animationIdRef = useRef<number | null>(null);
+  const [webglAvailable, setWebglAvailable] = useState<boolean | null>(null);
 
   const { currentData } = useAppStore();
 
@@ -37,13 +39,43 @@ export const WindTunnel3D: React.FC<WindTunnel3DProps> = ({ className = '' }) =>
     camera.lookAt(0, 0, 0);
     cameraRef.current = camera;
 
-    // Renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    // Renderer with fallback options
+    let renderer: THREE.WebGLRenderer;
+    try {
+      // Try WebGL2 first
+      renderer = new THREE.WebGLRenderer({ 
+        antialias: true,
+        powerPreference: "high-performance",
+        failIfMajorPerformanceCaveat: false,
+        preserveDrawingBuffer: false,
+        stencil: false,
+        depth: true
+      });
+    } catch (error) {
+      console.warn('WebGL2 failed, trying WebGL1:', error);
+      try {
+        // Fallback to WebGL1
+        renderer = new THREE.WebGLRenderer({ 
+          antialias: false,
+          powerPreference: "default",
+          failIfMajorPerformanceCaveat: false,
+          preserveDrawingBuffer: false,
+          stencil: false,
+          depth: true
+        });
+             } catch (webglError) {
+         console.error('WebGL initialization failed:', webglError);
+         setWebglAvailable(false);
+         return;
+       }
+    }
+
     renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     mountRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
+    setWebglAvailable(true);
 
     // Lighting
     const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
@@ -222,6 +254,11 @@ export const WindTunnel3D: React.FC<WindTunnel3DProps> = ({ className = '' }) =>
       }
     };
   }, []);
+
+  // Show fallback if WebGL is not available
+  if (webglAvailable === false) {
+    return <WebGLFallback className={className} />;
+  }
 
   return (
     <div className={`relative ${className}`}>
