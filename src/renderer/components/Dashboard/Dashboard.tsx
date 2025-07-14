@@ -10,6 +10,7 @@ import { PlayIcon, StopIcon, ChartBarIcon, DocumentTextIcon } from '@heroicons/r
 import { DashboardSkeleton } from './LoadingSkeleton';
 import { InfoTooltip } from '../UI/Tooltip';
 import { WebGLStatusIndicator } from '../UI/WebGLStatusIndicator';
+import { TouchScrollTest } from '../UI/TouchScrollTest';
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<'main' | 'analytics' | 'data'>('main');
@@ -43,6 +44,9 @@ export default function Dashboard() {
         <h1 className="text-2xl font-bold text-white">Dashboard</h1>
         <p className="text-background-400">Real-time wind tunnel data and visualization</p>
       </div>
+
+      {/* Touch Scroll Test */}
+      <TouchScrollTest />
 
       {/* Tab Navigation */}
       <div className="flex space-x-1 bg-background-800 rounded-lg p-1">
