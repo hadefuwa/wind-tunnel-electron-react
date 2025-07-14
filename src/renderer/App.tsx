@@ -10,10 +10,15 @@ import { OnboardingTutorial, useTutorial } from './components/UI/OnboardingTutor
 export default function App() {
   const { hasSeenTutorial, markTutorialComplete } = useTutorial();
   const [showTutorial, setShowTutorial] = useState(!hasSeenTutorial);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const handleTutorialComplete = () => {
     setShowTutorial(false);
     markTutorialComplete();
+  };
+
+  const toggleSidebar = () => {
+    setSidebarCollapsed(!sidebarCollapsed);
   };
 
   return (
@@ -21,8 +26,8 @@ export default function App() {
       <div className="min-h-screen bg-background-900 text-white flex flex-col">
         <Header />
         <div className="flex flex-1 overflow-hidden">
-          <Sidebar />
-          <main className="flex-1 p-6 overflow-y-auto overflow-x-auto scrollable" style={{ touchAction: 'pan-y pan-x' }}>
+          <Sidebar collapsed={sidebarCollapsed} onToggle={toggleSidebar} />
+          <main className="flex-1 p-6 overflow-y-auto overflow-x-auto scrollable transition-all duration-300" style={{ touchAction: 'pan-y pan-x' }}>
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/settings" element={<Settings />} />

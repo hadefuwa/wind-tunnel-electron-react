@@ -6,8 +6,15 @@ import {
   ChartBarIcon,
   CubeIcon,
   ExclamationTriangleIcon,
-  ComputerDesktopIcon
+  ComputerDesktopIcon,
+  Bars3Icon,
+  XMarkIcon
 } from '@heroicons/react/24/outline';
+
+interface SidebarProps {
+  collapsed: boolean;
+  onToggle: () => void;
+}
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon },
@@ -22,11 +29,24 @@ const quickStats = [
   { name: 'Pressure', value: '101.3', unit: 'kPa' },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const location = useLocation();
 
   return (
-    <div className="w-64 bg-background-800 border-r border-background-700 flex flex-col">
+    <div className={`${collapsed ? 'w-16' : 'w-64'} bg-background-800 border-r border-background-700 flex flex-col transition-all duration-300`}>
+      {/* Toggle Button */}
+      <div className="p-2 border-b border-background-700">
+        <button
+          onClick={onToggle}
+          className="w-full flex items-center justify-center p-2 rounded-lg text-background-300 hover:bg-background-700 hover:text-white transition-colors"
+        >
+          {collapsed ? (
+            <Bars3Icon className="h-5 w-5" />
+          ) : (
+            <XMarkIcon className="h-5 w-5" />
+          )}
+        </button>
+      </div>
       {/* Navigation */}
       <nav className="flex-1 p-4">
         <div className="space-y-2">
@@ -41,9 +61,10 @@ export default function Sidebar() {
                     ? 'bg-primary-600 text-white'
                     : 'text-background-300 hover:bg-background-700 hover:text-white'
                 }`}
+                title={collapsed ? item.name : undefined}
               >
-                <item.icon className="h-5 w-5 mr-3" />
-                {item.name}
+                <item.icon className={`h-5 w-5 ${collapsed ? '' : 'mr-3'}`} />
+                {!collapsed && item.name}
               </Link>
             );
           })}
@@ -51,26 +72,28 @@ export default function Sidebar() {
       </nav>
 
       {/* Quick Stats */}
-      <div className="p-4 border-t border-background-700">
-        <h3 className="text-sm font-medium text-background-300 mb-3">Quick Stats</h3>
-        <div className="space-y-2">
-          {quickStats.map((stat) => (
-            <div key={stat.name} className="flex justify-between items-center text-sm">
-              <span className="text-background-400">{stat.name}</span>
-              <div className="text-right">
-                <span className="text-white font-medium">{stat.value}</span>
-                <span className="text-background-400 ml-1">{stat.unit}</span>
+      {!collapsed && (
+        <div className="p-4 border-t border-background-700">
+          <h3 className="text-sm font-medium text-background-300 mb-3">Quick Stats</h3>
+          <div className="space-y-2">
+            {quickStats.map((stat) => (
+              <div key={stat.name} className="flex justify-between items-center text-sm">
+                <span className="text-background-400">{stat.name}</span>
+                <div className="text-right">
+                  <span className="text-white font-medium">{stat.value}</span>
+                  <span className="text-background-400 ml-1">{stat.unit}</span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Alerts */}
       <div className="p-4 border-t border-background-700">
-        <div className="flex items-center text-warning-400 text-sm">
-          <ExclamationTriangleIcon className="h-4 w-4 mr-2" />
-          <span>No active alerts</span>
+        <div className={`flex items-center text-warning-400 text-sm ${collapsed ? 'justify-center' : ''}`}>
+          <ExclamationTriangleIcon className={`h-4 w-4 ${collapsed ? '' : 'mr-2'}`} />
+          {!collapsed && <span>No active alerts</span>}
         </div>
       </div>
     </div>
