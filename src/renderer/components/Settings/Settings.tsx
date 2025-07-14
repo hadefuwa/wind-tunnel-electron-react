@@ -24,21 +24,37 @@ export default function Settings() {
   const [updating, setUpdating] = useState(false);
   const [updateMessage, setUpdateMessage] = useState<string | null>(null);
 
-  const handleUpdateFromGit = async () => {
+  const handleRunUpdateScript = async () => {
     setUpdating(true);
-    setUpdateMessage(null);
+    setUpdateMessage('🚀 Running update script...');
     try {
-      // Check if we're in Electron environment
       if (typeof window !== 'undefined' && (window as any).electronAPI) {
         // @ts-ignore
-        const result = await window.electronAPI.updateFromGit();
-        setUpdateMessage('✅ Update successful! App will restart.');
+        const result = await window.electronAPI.runUpdateScript();
+        setUpdateMessage('✅ ' + result);
       } else {
-        // Fallback for web-only environment
-        setUpdateMessage('⚠️ Manual update required. Please run: git pull && npm install && npm run build');
+        setUpdateMessage('⚠️ Electron API not available. Please run manually.');
       }
     } catch (err: any) {
-      setUpdateMessage('❌ Update failed: ' + (err?.message || err));
+      setUpdateMessage('❌ ' + (err?.message || err));
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const handleRunManualUpdate = async () => {
+    setUpdating(true);
+    setUpdateMessage('🔄 Opening terminal with update commands...');
+    try {
+      if (typeof window !== 'undefined' && (window as any).electronAPI) {
+        // @ts-ignore
+        const result = await window.electronAPI.runManualUpdate();
+        setUpdateMessage('✅ ' + result);
+      } else {
+        setUpdateMessage('⚠️ Electron API not available. Please run manually.');
+      }
+    } catch (err: any) {
+      setUpdateMessage('❌ ' + (err?.message || err));
     } finally {
       setUpdating(false);
     }
@@ -174,10 +190,18 @@ Or use the update script:
                   {updating ? 'Checking...' : 'Check for Updates'}
                 </button>
                 <button
-                  onClick={handleManualUpdate}
-                  className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-white font-medium transition-colors"
+                  onClick={handleRunUpdateScript}
+                  disabled={updating}
+                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-white font-medium transition-colors disabled:opacity-50 mr-2"
                 >
-                  Show Manual Update Instructions
+                  {updating ? 'Running...' : 'Run Update Script'}
+                </button>
+                <button
+                  onClick={handleRunManualUpdate}
+                  disabled={updating}
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-white font-medium transition-colors disabled:opacity-50"
+                >
+                  {updating ? 'Opening...' : 'Open Terminal with Commands'}
                 </button>
               </div>
               {updateMessage && (

@@ -163,22 +163,76 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 }); 
 
-// Add IPC handler for update-from-git
-ipcMain.handle('update-from-git', async () => {
+// Add IPC handlers for update operations
+ipcMain.handle('run-update-script', async () => {
   return new Promise((resolve, reject) => {
-    // Run update commands sequentially
-    exec('git pull origin main', { cwd: process.cwd() }, (err, stdout, stderr) => {
-      if (err) return reject(`git pull failed: ${stderr}`);
-      exec('npm install', { cwd: process.cwd() }, (err2, stdout2, stderr2) => {
-        if (err2) return reject(`npm install failed: ${stderr2}`);
-        exec('npm run build', { cwd: process.cwd() }, (err3, stdout3, stderr3) => {
-          if (err3) return reject(`npm run build failed: ${stderr3}`);
-          // All done, restart the app
-          electronApp.relaunch();
-          electronApp.exit(0);
-          resolve('Update and restart successful');
-        });
-      });
+    // Check if we're on Raspberry Pi
+    if (!isPi) {
+      return reject('Update script is only available on Raspberry Pi');
+    }
+
+    // Try to run the update script
+    const updateScript = '/usr/local/bin/update-wind-tunnel.sh';
+    exec(`sudo ${updateScript}`, (err, stdout, stderr) => {
+      if (err) {
+        // If script doesn't exist, provide manual instructions
+        return reject(`Update script not found. Please run manually:\ncd /home/matrix/wind-tunnel-electron-react\ngit pull origin main\nnpm install\nnpm run build\nsudo systemctl restart wind-tunnel`);
+      }
+      resolve(`Update script executed successfully:\n${stdout}`);
     });
   });
+});
+
+ipcMain.handle('run-manual-update', async () => {
+  return new Promise((resolve, reject) => {
+    // Check if we're on Raspberry Pi
+    if (!isPi) {
+      return reject('Manual update is only available on Raspberry Pi');
+    }
+
+    const appDir = '/home/matrix/wind-tunnel-electron-react';
+    
+    // Run update commands in a new terminal window
+    const commands = [
+      `cd ${appDir}`,
+      'git pull origin main',
+      'npm install',
+      'npm run build',
+      'sudo systemctl restart wind-tunnel'
+    ].join(' && ');
+
+    // Open a new terminal with the commands
+    exec(`gnome-terminal -- bash -c "${commands}; read -p 'Press Enter to close...'"`, (err, stdout, stderr) => {
+      if (err) {
+        // Fallback: try xterm
+        exec(`xterm -e "bash -c '${commands}; read -p \"Press Enter to close...\"'"`, (err2, stdout2, stderr2) => {
+          if (err2) {
+            // Last resort: just show the commands
+            resolve(`Please run these commands in terminal:\n\n${commands}`);
+          } else {
+            resolve('Update commands opened in xterm terminal');
+          }
+        });
+      } else {
+        resolve('Update commands opened in gnome-terminal');
+      }
+    });
+  });
+});
+
+ipcMain.handle('check-app-version', async () => {
+  try {
+    const packageJson = require('../../package.json');
+    return {
+      version: packageJson.version,
+      isPi: isPi,
+      appDir: isPi ? '/home/matrix/wind-tunnel-electron-react' : process.cwd()
+    };
+  } catch (error) {
+    return {
+      version: 'unknown',
+      isPi: isPi,
+      appDir: isPi ? '/home/matrix/wind-tunnel-electron-react' : process.cwd()
+    };
+  }
 }); 
