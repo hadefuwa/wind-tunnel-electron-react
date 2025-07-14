@@ -16,6 +16,8 @@
     "dist:win": "npm run build && electron-builder --win",
     "dist:mac": "npm run build && electron-builder --mac",
     "dist:linux": "npm run build && electron-builder --linux",
+    "dist:raspberry-pi": "npm run build && electron-builder --linux --armv7l",
+    "dist:raspberry-pi-64": "npm run build && electron-builder --linux --arm64",
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "eslint . --ext .ts,.tsx",
@@ -101,8 +103,18 @@
       "icon": "public/icon.icns"
     },
     "linux": {
-      "target": "AppImage",
-      "icon": "public/icon.png"
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["armv7l", "arm64"]
+        },
+        {
+          "target": "deb",
+          "arch": ["armv7l", "arm64"]
+        }
+      ],
+      "icon": "public/icon.png",
+      "category": "Science"
     }
   }
 }

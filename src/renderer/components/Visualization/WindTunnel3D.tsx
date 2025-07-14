@@ -7,6 +7,15 @@ interface WindTunnel3DProps {
   className?: string;
 }
 
+// Detect Raspberry Pi
+const isRaspberryPi = () => {
+  if (typeof window !== 'undefined' && window.navigator) {
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    return userAgent.includes('raspberry') || userAgent.includes('arm');
+  }
+  return false;
+};
+
 // WebGL detection utility
 const detectWebGLSupport = () => {
   try {
@@ -47,12 +56,26 @@ export const WindTunnel3D: React.FC<WindTunnel3DProps> = ({ className = '' }) =>
   const [webglInfo, setWebglInfo] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [retryCount, setRetryCount] = useState(0);
+  const [isPi, setIsPi] = useState(false);
 
   const { currentData } = useAppStore();
+
+  // Check if running on Raspberry Pi
+  useEffect(() => {
+    setIsPi(isRaspberryPi());
+  }, []);
 
   // WebGL detection with retry logic
   const initializeWebGL = useCallback(async () => {
     console.log('🔍 Checking WebGL support...');
+    
+    // If on Raspberry Pi, use fallback immediately
+    if (isPi) {
+      console.log('🍓 Raspberry Pi detected - using 2D fallback');
+      setWebglStatus('unavailable');
+      setErrorMessage('3D visualization disabled on Raspberry Pi for performance');
+      return false;
+    }
     
     // Check if WebGL is disabled at system level
     if (navigator.userAgent.includes('Electron')) {
@@ -95,7 +118,7 @@ export const WindTunnel3D: React.FC<WindTunnel3DProps> = ({ className = '' }) =>
       setErrorMessage(`Three.js initialization failed: ${(error as Error).message}`);
       return false;
     }
-  }, []);
+  }, [isPi]);
 
   // Initialize scene with comprehensive error handling
   const initializeScene = useCallback(async () => {
