@@ -118,9 +118,6 @@ npm run build
 # If running as a service:
 sudo systemctl restart wind-tunnel
 
-# Or if running manually, stop and restart:
-# Ctrl+C to stop, then:
-npm run dev
 ```
 
 **Automatic Updates (Optional)**
