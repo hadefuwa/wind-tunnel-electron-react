@@ -3,6 +3,19 @@ import * as path from 'path';
 import { defaultWebSocketService } from './services/WebSocketServer';
 import { exec } from 'child_process';
 
+// Move all commandLine switches here, right after importing 'app'
+app.commandLine.appendSwitch('--disable-gpu-sandbox');
+app.commandLine.appendSwitch('--disable-software-rasterizer');
+app.commandLine.appendSwitch('--disable-dev-shm-usage');
+app.commandLine.appendSwitch('--no-sandbox');
+app.commandLine.appendSwitch('--disable-web-security');
+app.commandLine.appendSwitch('--allow-running-insecure-content');
+app.commandLine.appendSwitch('--disable-gpu-process-crash-limit');
+app.commandLine.appendSwitch('--disable-gpu-driver-bug-workarounds');
+app.commandLine.appendSwitch('--disable-gpu-vsync');
+app.commandLine.appendSwitch('--disable-accelerated-2d-canvas');
+app.commandLine.appendSwitch('--disable-accelerated-video-decode');
+
 // Detect if running on Raspberry Pi
 const isRaspberryPi = () => {
   try {
@@ -25,19 +38,6 @@ const isHeadlessMode = isHeadless();
 console.log(`🍓 Raspberry Pi: ${isPi}`);
 console.log(`🖥️  Headless mode: ${isHeadlessMode}`);
 console.log(`🖥️  DISPLAY: ${process.env.DISPLAY || 'not set'}`);
-
-// Handle GPU process crashes and WebGL issues
-app.commandLine.appendSwitch('--disable-gpu-sandbox');
-app.commandLine.appendSwitch('--disable-software-rasterizer');
-app.commandLine.appendSwitch('--disable-dev-shm-usage');
-app.commandLine.appendSwitch('--no-sandbox');
-app.commandLine.appendSwitch('--disable-web-security');
-app.commandLine.appendSwitch('--allow-running-insecure-content');
-app.commandLine.appendSwitch('--disable-gpu-process-crash-limit');
-app.commandLine.appendSwitch('--disable-gpu-driver-bug-workarounds');
-app.commandLine.appendSwitch('--disable-gpu-vsync');
-app.commandLine.appendSwitch('--disable-accelerated-2d-canvas');
-app.commandLine.appendSwitch('--disable-accelerated-video-decode');
 
 // Raspberry Pi specific optimizations
 if (isPi) {
