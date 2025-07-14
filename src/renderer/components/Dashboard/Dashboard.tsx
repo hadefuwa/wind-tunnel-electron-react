@@ -37,7 +37,7 @@ export default function Dashboard() {
     { name: 'Temperature', value: currentData.temperature.toFixed(1), unit: '°C', trend: 'stable' as const, color: 'info' as const },
   ] : [];
   return (
-    <div className="space-y-6 dashboard-content">
+    <div className="space-y-6 content-scrollable">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-white">Dashboard</h1>

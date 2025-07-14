@@ -67,7 +67,7 @@ html, body, #root {
   touch-action: pan-y pan-x; /* Allow both vertical and horizontal scrolling */
   -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-  overflow: auto; /* Enable scrolling */
+  overflow: hidden; /* Prevent multiple scrollbars */
 }
 
 /* Allow text selection where needed */
@@ -78,12 +78,7 @@ html, body, #root {
   user-select: text;
 }
 
-/* Touch-friendly scrollable area */
-.scrollable {
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-  overflow-y: auto;
-  touch-action: pan-y; /* Allow vertical scrolling */
-}
+
 
 /* Prevent text selection on buttons and interactive elements */
 button, input, select, textarea {
@@ -96,7 +91,7 @@ button, input, select, textarea {
 /* Ensure main content area is scrollable */
 main {
   overflow-y: auto;
-  overflow-x: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y pan-x;
   height: 100vh;
@@ -107,19 +102,7 @@ main {
   user-select: none;
 }
 
-/* Dashboard specific touch improvements */
-.dashboard-content {
-  overflow-y: auto;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-y pan-x;
-  height: 100%;
-  min-height: 100vh;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
+
 
 /* Raspberry Pi touchscreen specific improvements */
 @media (pointer: coarse) {
@@ -141,14 +124,8 @@ main {
     transform: scale(0.98);
   }
   
-  /* Make all content areas touch-scrollable */
-  .space-y-6, .space-y-4, .space-y-2 {
-    touch-action: pan-y pan-x;
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  /* Ensure grid layouts are scrollable */
-  .grid {
+  /* Touch scrolling for content areas */
+  .content-scrollable {
     touch-action: pan-y pan-x;
     -webkit-overflow-scrolling: touch;
   }
@@ -168,28 +145,10 @@ main {
   }
 }
 
-/* Additional touch scrolling improvements for all screen sizes */
-.space-y-6, .space-y-4, .space-y-2 {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+/* Touch scrolling for specific content areas only */
+.content-scrollable {
   touch-action: pan-y pan-x;
   -webkit-overflow-scrolling: touch;
-}
-
-/* Ensure all grid layouts are touch-scrollable */
-.grid {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  touch-action: pan-y pan-x;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Make sure all div containers allow touch scrolling */
-div {
-  touch-action: pan-y pan-x;
-  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+  overflow-x: hidden;
 } 
