@@ -58,20 +58,32 @@ npm run build
 
 if [ $? -ne 0 ]; then
     echo "❌ Failed to build the application"
-    echo "🔍 Running debug script to identify issues..."
-    chmod +x scripts/debug-build.sh
-    ./scripts/debug-build.sh
-    exit 1
+    echo "🔧 Running fix script..."
+    chmod +x scripts/fix-build.sh
+    ./scripts/fix-build.sh
+    if [ $? -ne 0 ]; then
+        echo "❌ Fix script failed"
+        echo "🔍 Running debug script to identify issues..."
+        chmod +x scripts/debug-build.sh
+        ./scripts/debug-build.sh
+        exit 1
+    fi
 fi
 
 # Verify the build
 echo "🔍 Verifying build..."
 if [ ! -f "dist/main/index.js" ]; then
     echo "❌ dist/main/index.js not found after build"
-    echo "🔍 Running debug script..."
-    chmod +x scripts/debug-build.sh
-    ./scripts/debug-build.sh
-    exit 1
+    echo "🔧 Running fix script..."
+    chmod +x scripts/fix-build.sh
+    ./scripts/fix-build.sh
+    if [ $? -ne 0 ]; then
+        echo "❌ Fix script failed"
+        echo "🔍 Running debug script..."
+        chmod +x scripts/debug-build.sh
+        ./scripts/debug-build.sh
+        exit 1
+    fi
 fi
 
 echo "✅ Build verification successful"
