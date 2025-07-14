@@ -1,0 +1,17 @@
+[Unit]
+Description=Wind Tunnel Application
+After=network.target
+
+[Service]
+Type=simple
+User=matrix
+Group=matrix
+WorkingDirectory=/home/matrix/wind-tunnel-electron-react
+ExecStart=/home/matrix/wind-tunnel-electron-react/start.sh
+Restart=always
+RestartSec=10
+Environment=NODE_ENV=production
+Environment=DISPLAY=:0
+
+[Install]
+WantedBy=multi-user.target 

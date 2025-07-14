@@ -16,7 +16,7 @@ const isRaspberryPi = () => {
 
 // Detect if running in headless mode (no display)
 const isHeadless = () => {
-  return !process.env.DISPLAY || process.env.DISPLAY === '' || process.env.DISPLAY === ':0';
+  return !process.env.DISPLAY || process.env.DISPLAY === '';
 };
 
 const isPi = isRaspberryPi();
