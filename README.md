@@ -116,7 +116,7 @@ npm run build
 
 # Restart the application
 # If running as a service:
-sudo systemctl restart wind-tunnel-app
+sudo systemctl restart wind-tunnel
 
 # Or if running manually, stop and restart:
 # Ctrl+C to stop, then:
@@ -134,7 +134,7 @@ cd /home/matrix/wind-tunnel-electron-react
 git pull origin main
 npm install
 npm run build
-sudo systemctl restart wind-tunnel-app
+sudo systemctl restart wind-tunnel
 
 # Make it executable
 sudo chmod +x /usr/local/bin/update-wind-tunnel.sh
@@ -146,7 +146,7 @@ sudo /usr/local/bin/update-wind-tunnel.sh
 **Troubleshooting Updates**
 - If you get merge conflicts: `git stash` then `git pull`
 - If build fails: `rm -rf node_modules && npm install`
-- If service won't restart: `sudo systemctl status wind-tunnel-app`
+- If service won't restart: `sudo systemctl status wind-tunnel`
 
 ## 🛠️ Technology Stack
 
