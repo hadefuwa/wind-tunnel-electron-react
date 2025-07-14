@@ -14,7 +14,17 @@ const isRaspberryPi = () => {
   }
 };
 
+// Detect if running in headless mode (no display)
+const isHeadless = () => {
+  return !process.env.DISPLAY || process.env.DISPLAY === '' || process.env.DISPLAY === ':0';
+};
+
 const isPi = isRaspberryPi();
+const isHeadlessMode = isHeadless();
+
+console.log(`🍓 Raspberry Pi: ${isPi}`);
+console.log(`🖥️  Headless mode: ${isHeadlessMode}`);
+console.log(`🖥️  DISPLAY: ${process.env.DISPLAY || 'not set'}`);
 
 // Handle GPU process crashes and WebGL issues
 app.commandLine.appendSwitch('--disable-gpu-sandbox');
@@ -54,9 +64,26 @@ if (isPi) {
   app.commandLine.appendSwitch('--enable-webgl2');
 }
 
+// Headless mode support
+if (isHeadlessMode) {
+  console.log('🖥️  Headless mode detected - applying headless optimizations');
+  app.commandLine.appendSwitch('--headless');
+  app.commandLine.appendSwitch('--disable-gpu');
+  app.commandLine.appendSwitch('--no-sandbox');
+  app.commandLine.appendSwitch('--disable-dev-shm-usage');
+  app.commandLine.appendSwitch('--disable-web-security');
+  app.commandLine.appendSwitch('--disable-features', 'VizDisplayCompositor');
+}
+
 const isDev = !app.isPackaged;
 
 function createWindow() {
+  // Don't create window in headless mode
+  if (isHeadlessMode) {
+    console.log('🖥️  Running in headless mode - no window will be created');
+    return null;
+  }
+
   const win = new BrowserWindow({
     width: isPi ? 1024 : 1280, // Smaller window for Pi
     height: isPi ? 768 : 800,
@@ -116,11 +143,17 @@ app.whenReady().then(async () => {
     console.error('Failed to start WebSocket server:', error);
   }
 
-  createWindow();
+  // Only create window if not in headless mode
+  if (!isHeadlessMode) {
+    createWindow();
 
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
+    app.on('activate', () => {
+      if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    });
+  } else {
+    console.log('🖥️  Running in headless mode - WebSocket server is available');
+    console.log('🌐 WebSocket server running on port 8080');
+  }
 });
 
 app.on('window-all-closed', () => {
