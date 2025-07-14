@@ -82,7 +82,7 @@
     "tailwindcss": "^3.3.6",
     "three": "^0.158.0",
     "uuid": "^9.0.1",
-    "wind-tunnel-electron": "file:",
+
     "ws": "^8.18.3",
     "zustand": "^4.4.7"
   },
