@@ -39,7 +39,17 @@ if [ -z "$DISPLAY" ]; then
     npm run dev:renderer
 else
     echo "🖥️ Desktop mode detected - starting full application..."
-    npm run dev
+    # Fix the main path issue - check both possible locations
+    if [ -f "dist/main/main/index.js" ]; then
+        echo "✅ Found main process at dist/main/main/index.js"
+        node dist/main/main/index.js
+    elif [ -f "dist/main/index.js" ]; then
+        echo "✅ Found main process at dist/main/index.js"
+        node dist/main/index.js
+    else
+        echo "⚠️ No built main process found, starting development mode..."
+        npm run dev
+    fi
 fi
 EOF
 

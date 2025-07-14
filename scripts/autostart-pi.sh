@@ -149,9 +149,15 @@ if [ -z "$DISPLAY" ]; then
     # Start web service mode
     if [ -f "dist/main/main/index.js" ]; then
         # Production mode
+        echo "✅ Found main process at dist/main/main/index.js"
         node dist/main/main/index.js --web-mode
+    elif [ -f "dist/main/index.js" ]; then
+        # Production mode (alternative path)
+        echo "✅ Found main process at dist/main/index.js"
+        node dist/main/index.js --web-mode
     else
         # Development mode
+        echo "⚠️ No built main process found, starting development mode..."
         npm run dev:renderer &
         sleep 5
         echo "✅ Web service started at http://localhost:3000"
@@ -163,9 +169,15 @@ else
     # Desktop mode
     if [ -f "dist/main/main/index.js" ]; then
         # Production mode
+        echo "✅ Found main process at dist/main/main/index.js"
         node dist/main/main/index.js
+    elif [ -f "dist/main/index.js" ]; then
+        # Production mode (alternative path)
+        echo "✅ Found main process at dist/main/index.js"
+        node dist/main/index.js
     else
         # Development mode
+        echo "⚠️ No built main process found, starting development mode..."
         npm run dev
     fi
 fi

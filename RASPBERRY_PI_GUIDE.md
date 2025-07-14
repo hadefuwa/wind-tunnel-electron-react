@@ -285,7 +285,20 @@ cp package.json release/pi/
 cp -r node_modules release/pi/
 ```
 
-**5. SPI Communication Errors**
+**5. Main Path Issues**
+```bash
+# If you get "Cannot find module" error for main process:
+# This is due to the dist/main/main/index.js structure
+# Fix it with the provided script:
+chmod +x scripts/fix-main-path.sh
+./scripts/fix-main-path.sh
+
+# Or manually create symlinks:
+ln -sf dist/main/main/index.js dist/main/index.js
+ln -sf dist/main/main/preload.js dist/main/preload.js
+```
+
+**6. SPI Communication Errors**
 ```bash
 # Test SPI manually
 sudo apt install spi-tools
