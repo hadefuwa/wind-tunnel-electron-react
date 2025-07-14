@@ -10,7 +10,7 @@ import { OnboardingTutorial, useTutorial } from './components/UI/OnboardingTutor
 export default function App() {
   const { hasSeenTutorial, markTutorialComplete } = useTutorial();
   const [showTutorial, setShowTutorial] = useState(!hasSeenTutorial);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
 
   // Debug touchscreen scrolling
   useEffect(() => {
