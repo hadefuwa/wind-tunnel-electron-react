@@ -87,6 +87,60 @@ npm run dist:raspberry-pi     # Pi 3 (32-bit)
 
 📖 **Full Pi Guide**: See [RASPBERRY_PI_GUIDE.md](RASPBERRY_PI_GUIDE.md) for detailed setup instructions.
 
+### **Updating on Raspberry Pi**
+
+To get the latest updates on your Raspberry Pi:
+
+```bash
+# Navigate to your project directory
+cd /path/to/wind-tunnel-electron-react
+
+# Check current status
+git status
+
+# Pull latest changes from GitHub
+git pull origin main
+
+# Install any new dependencies
+npm install
+
+# Rebuild the application
+npm run build
+
+# Restart the application
+# If running as a service:
+sudo systemctl restart wind-tunnel-app
+
+# Or if running manually, stop and restart:
+# Ctrl+C to stop, then:
+npm run dev
+```
+
+**Automatic Updates (Optional)**
+```bash
+# Create an update script
+sudo nano /usr/local/bin/update-wind-tunnel.sh
+
+# Add this content:
+#!/bin/bash
+cd /path/to/wind-tunnel-electron-react
+git pull origin main
+npm install
+npm run build
+sudo systemctl restart wind-tunnel-app
+
+# Make it executable
+sudo chmod +x /usr/local/bin/update-wind-tunnel.sh
+
+# Run updates with:
+sudo /usr/local/bin/update-wind-tunnel.sh
+```
+
+**Troubleshooting Updates**
+- If you get merge conflicts: `git stash` then `git pull`
+- If build fails: `rm -rf node_modules && npm install`
+- If service won't restart: `sudo systemctl status wind-tunnel-app`
+
 ## 🛠️ Technology Stack
 
 - **Frontend**: React 18 + TypeScript
