@@ -17,6 +17,8 @@ const tabs = [
   { name: 'Visualization', icon: CubeIcon },
 ];
 
+const APP_VERSION = '1.0.0';
+
 export default function Settings() {
   const [activeTab, setActiveTab] = useState('General');
   const [updating, setUpdating] = useState(false);
@@ -26,9 +28,15 @@ export default function Settings() {
     setUpdating(true);
     setUpdateMessage(null);
     try {
-      // @ts-ignore
-      const result = await window.electronAPI.updateFromGit();
-      setUpdateMessage('✅ Update successful! App will restart.');
+      // Check if we're in Electron environment
+      if (typeof window !== 'undefined' && (window as any).electronAPI) {
+        // @ts-ignore
+        const result = await window.electronAPI.updateFromGit();
+        setUpdateMessage('✅ Update successful! App will restart.');
+      } else {
+        // Fallback for web-only environment
+        setUpdateMessage('⚠️ Manual update required. Please run: git pull && npm install && npm run build');
+      }
     } catch (err: any) {
       setUpdateMessage('❌ Update failed: ' + (err?.message || err));
     } finally {
@@ -40,8 +48,16 @@ export default function Settings() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-white">Settings</h1>
-        <p className="text-background-400">Configure your wind tunnel application</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-white">Settings</h1>
+            <p className="text-background-400">Configure your wind tunnel application</p>
+          </div>
+          <div className="text-right">
+            <span className="text-sm text-background-400">Version</span>
+            <div className="text-lg font-bold text-primary-400">v{APP_VERSION}</div>
+          </div>
+        </div>
       </div>
 
       {/* Tabs */}
