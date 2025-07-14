@@ -16,13 +16,13 @@ if [ $? -eq 0 ]; then
     
     # Check file structure
     echo "📂 Checking file structure..."
-    if [ -f "dist/main/index.js" ]; then
-        echo "✅ dist/main/index.js exists"
-        echo "📄 File size: $(ls -lh dist/main/index.js | awk '{print $5}')"
+    if [ -f "dist/main/main/index.js" ]; then
+        echo "✅ dist/main/main/index.js exists"
+        echo "📄 File size: $(ls -lh dist/main/main/index.js | awk '{print $5}')"
         echo "📄 First few lines:"
-        head -5 dist/main/index.js
+        head -5 dist/main/main/index.js
     else
-        echo "❌ dist/main/index.js not found"
+        echo "❌ dist/main/main/index.js not found"
         echo "📂 What was created:"
         find dist/ -type f -name "*.js" | head -10
     fi

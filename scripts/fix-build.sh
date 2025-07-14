@@ -23,11 +23,11 @@ if [ $? -eq 0 ]; then
     echo "✅ Build completed successfully"
     
     # Check if the main entry file exists
-    if [ -f "dist/main/index.js" ]; then
-        echo "✅ dist/main/index.js exists"
-        echo "📄 File size: $(ls -lh dist/main/index.js | awk '{print $5}')"
+    if [ -f "dist/main/main/index.js" ]; then
+        echo "✅ dist/main/main/index.js exists"
+        echo "📄 File size: $(ls -lh dist/main/main/index.js | awk '{print $5}')"
     else
-        echo "❌ dist/main/index.js still missing"
+        echo "❌ dist/main/main/index.js still missing"
         echo "🔍 Checking what was created..."
         ls -la dist/main/
         exit 1

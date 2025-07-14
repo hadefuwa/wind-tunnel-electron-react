@@ -2,7 +2,7 @@
   "name": "wind-tunnel-electron",
   "version": "1.0.0",
   "description": "Desktop application for wind tunnel data acquisition and visualization",
-  "main": "dist/main/index.js",
+  "main": "dist/main/main/index.js",
   "scripts": {
     "dev": "concurrently \"npm run dev:renderer\" \"npm run dev:main\"",
     "dev:renderer": "vite",
