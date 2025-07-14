@@ -90,13 +90,16 @@ sudo apt install -y \
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-repo/wind-tunnel-electron-react.git
+git clone https://github.com/hadefuwa/wind-tunnel-electron-react.git
 cd wind-tunnel-electron-react
 
 # Install dependencies
 npm install
 
-# Build for Raspberry Pi
+# Build for Raspberry Pi (Simple Method - Recommended)
+npm run dist:pi-simple
+
+# Alternative: Try electron-builder (may fail on ARM64)
 npm run dist:raspberry-pi-64  # For Pi 4 (64-bit)
 # OR
 npm run dist:raspberry-pi     # For Pi 3 (32-bit)
@@ -186,12 +189,21 @@ npm run dev
 ### **Production Mode**
 
 ```bash
-# Run the built application
-./release/linux-arm64/Wind\ Tunnel\ Application-1.0.0.AppImage
+# Method 1: Simple Package (Recommended)
+cd release/pi
+./start.sh
 
-# Or install the .deb package
+# Method 2: Install as System Service
+sudo ./install.sh
+sudo systemctl start wind-tunnel
+
+# Method 3: Desktop Application
+# Look for "Wind Tunnel Application" in the Applications menu
+
+# Method 4: Electron Builder (if successful)
+./release/linux-arm64/Wind\ Tunnel\ Application-1.0.0.AppImage
+# OR
 sudo dpkg -i release/linux-arm64/wind-tunnel-electron_1.0.0_arm64.deb
-wind-tunnel-electron
 ```
 
 ## 📊 **Performance Expectations**
@@ -258,7 +270,22 @@ vcgencmd measure_temp
 free -h
 ```
 
-**4. SPI Communication Errors**
+**4. Build Errors**
+```bash
+# If you get "app-builder process failed" error:
+# This is a known issue with electron-builder on ARM64
+# Use the simple packaging method instead:
+npm run dist:pi-simple
+
+# Or build manually:
+npm run build
+mkdir -p release/pi
+cp -r dist/* release/pi/
+cp package.json release/pi/
+cp -r node_modules release/pi/
+```
+
+**5. SPI Communication Errors**
 ```bash
 # Test SPI manually
 sudo apt install spi-tools

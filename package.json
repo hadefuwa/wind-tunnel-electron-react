@@ -18,6 +18,8 @@
     "dist:linux": "npm run build && electron-builder --linux",
     "dist:raspberry-pi": "npm run build && electron-builder --linux --armv7l",
     "dist:raspberry-pi-64": "npm run build && electron-builder --linux --arm64",
+    "dist:pi-simple": "npm run build && npm run package-pi",
+    "package-pi": "mkdir -p release/pi && cp -r dist/* release/pi/ && cp package.json release/pi/ && cp -r node_modules release/pi/",
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "eslint . --ext .ts,.tsx",
@@ -106,15 +108,17 @@
       "target": [
         {
           "target": "AppImage",
-          "arch": ["armv7l", "arm64"]
+          "arch": ["x64"]
         },
         {
           "target": "deb",
-          "arch": ["armv7l", "arm64"]
+          "arch": ["x64"]
         }
       ],
       "icon": "public/icon.png",
       "category": "Science"
-    }
+    },
+    "afterSign": "scripts/notarize.js",
+    "publish": null
   }
 }
