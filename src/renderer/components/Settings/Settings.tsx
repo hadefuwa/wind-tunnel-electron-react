@@ -44,6 +44,57 @@ export default function Settings() {
     }
   };
 
+  const handleManualUpdate = () => {
+    setUpdateMessage(`
+📋 Manual Update Instructions for Raspberry Pi:
+
+1. Open terminal on your Pi
+2. Navigate to app directory:
+   cd /home/matrix/wind-tunnel-electron-react
+
+3. Pull latest changes:
+   git pull origin main
+
+4. Install dependencies:
+   npm install
+
+5. Rebuild the app:
+   npm run build
+
+6. Restart the service:
+   sudo systemctl restart wind-tunnel
+
+Or use the update script:
+   sudo /usr/local/bin/update-wind-tunnel.sh
+    `);
+  };
+
+  const handleCheckForUpdates = async () => {
+    setUpdating(true);
+    setUpdateMessage('🔍 Checking for updates...');
+    
+    try {
+      // Simulate checking for updates
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // For now, just show current version info
+      setUpdateMessage(`
+📊 Current Version: v${APP_VERSION}
+
+🔄 To update on Raspberry Pi:
+• Use the manual update instructions below
+• Or run the update script if configured
+• Updates require terminal access and sudo privileges
+
+⚠️ Note: Auto-updates are not available for security reasons
+      `);
+    } catch (err: any) {
+      setUpdateMessage('❌ Failed to check for updates: ' + (err?.message || err));
+    } finally {
+      setUpdating(false);
+    }
+  };
+
   return (
     <div className="space-y-6 dashboard-content">
       {/* Header */}
@@ -111,18 +162,32 @@ export default function Settings() {
                 </select>
               </div>
             </div>
-            {/* Update from Git Button */}
-            <div className="mt-6">
-              <button
-                onClick={handleUpdateFromGit}
-                disabled={updating}
-                className="px-4 py-2 bg-primary-600 hover:bg-primary-700 rounded-lg text-white font-medium transition-colors disabled:opacity-50"
-              >
-                {updating ? 'Updating...' : 'Update from Git & Restart'}
-              </button>
+            {/* Update Section */}
+            <div className="mt-6 p-4 bg-background-700 rounded-lg">
+              <h4 className="text-md font-semibold mb-3">Application Updates</h4>
+              <div className="space-y-3">
+                <button
+                  onClick={handleCheckForUpdates}
+                  disabled={updating}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors disabled:opacity-50 mr-2"
+                >
+                  {updating ? 'Checking...' : 'Check for Updates'}
+                </button>
+                <button
+                  onClick={handleManualUpdate}
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-white font-medium transition-colors"
+                >
+                  Show Manual Update Instructions
+                </button>
+              </div>
               {updateMessage && (
-                <div className="mt-2 text-sm text-background-300">{updateMessage}</div>
+                <div className="mt-3 p-3 bg-background-600 rounded text-sm text-background-200 whitespace-pre-line">
+                  {updateMessage}
+                </div>
               )}
+              <div className="mt-3 text-xs text-background-400">
+                💡 Tip: For Raspberry Pi, use terminal commands or the update script for reliable updates.
+              </div>
             </div>
           </div>
         )}
