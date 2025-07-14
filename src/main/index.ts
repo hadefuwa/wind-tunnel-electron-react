@@ -1,6 +1,7 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain, app as electronApp } from 'electron';
 import * as path from 'path';
 import { defaultWebSocketService } from './services/WebSocketServer';
+import { exec } from 'child_process';
 
 // Detect if running on Raspberry Pi
 const isRaspberryPi = () => {
@@ -127,4 +128,24 @@ app.on('window-all-closed', () => {
   defaultWebSocketService.stop();
   
   if (process.platform !== 'darwin') app.quit();
+}); 
+
+// Add IPC handler for update-from-git
+ipcMain.handle('update-from-git', async () => {
+  return new Promise((resolve, reject) => {
+    // Run update commands sequentially
+    exec('git pull origin main', { cwd: process.cwd() }, (err, stdout, stderr) => {
+      if (err) return reject(`git pull failed: ${stderr}`);
+      exec('npm install', { cwd: process.cwd() }, (err2, stdout2, stderr2) => {
+        if (err2) return reject(`npm install failed: ${stderr2}`);
+        exec('npm run build', { cwd: process.cwd() }, (err3, stdout3, stderr3) => {
+          if (err3) return reject(`npm run build failed: ${stderr3}`);
+          // All done, restart the app
+          electronApp.relaunch();
+          electronApp.exit(0);
+          resolve('Update and restart successful');
+        });
+      });
+    });
+  });
 }); 
