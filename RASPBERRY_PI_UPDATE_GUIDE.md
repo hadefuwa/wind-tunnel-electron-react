@@ -4,8 +4,8 @@
 
 1. **Open Terminal on your Raspberry Pi**
    ```bash
-   # Navigate to your project directory
-   cd /home/pi/wind-tunnel-electron-react
+   # Navigate to your project directory (matrix user)
+   cd /home/matrix/wind-tunnel-electron-react
    ```
 
 2. **Stop the current app** (if running)
@@ -34,6 +34,11 @@
    ```bash
    npm start
    ```
+   
+   **Note:** If `npm start` doesn't work, use:
+   ```bash
+   npm run electron
+   ```
 
 ## Using the Update Script
 
@@ -46,6 +51,42 @@
    ```bash
    ./scripts/update-pi.sh
    ```
+
+## Permission Issues
+
+### If you get "Permission denied" when accessing /home/matrix/:
+
+**Option 1: Check if you're in the right directory**
+```bash
+# Check your current user
+whoami
+
+# Should show 'matrix'
+```
+
+**Option 2: Use your home directory shortcut**
+```bash
+# Navigate to your home directory
+cd ~/wind-tunnel-electron-react
+
+# Or explicitly
+cd /home/matrix/wind-tunnel-electron-react
+```
+
+**Option 3: Find where your project actually is**
+```bash
+# Search for the project directory
+find /home -name "wind-tunnel-electron-react" 2>/dev/null
+
+# Or check if it's in your home directory
+ls -la ~/wind-tunnel-electron-react
+```
+
+### If the project is in a different location:
+```bash
+# Use the path from find command
+cd /path/to/your/wind-tunnel-electron-react
+```
 
 ## Troubleshooting
 

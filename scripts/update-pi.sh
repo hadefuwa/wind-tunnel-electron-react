@@ -6,8 +6,8 @@
 echo "🔄 Starting Wind Tunnel App update on Raspberry Pi..."
 
 # Navigate to the project directory
-# Adjust this path to match your Pi's project location
-PROJECT_DIR="/home/pi/wind-tunnel-electron-react"
+# Updated to use matrix user's home directory
+PROJECT_DIR="/home/matrix/wind-tunnel-electron-react"
 
 if [ ! -d "$PROJECT_DIR" ]; then
     echo "❌ Project directory not found at $PROJECT_DIR"
