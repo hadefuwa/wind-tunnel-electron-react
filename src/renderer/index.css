@@ -59,7 +59,11 @@
 
 /* Touchscreen-friendly global styles */
 html, body, #root {
-  /* Remove user-select: none to allow text selection and better touch interaction */
+  /* Prevent text selection to improve touch scrolling */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   touch-action: pan-y pan-x; /* Allow both vertical and horizontal scrolling */
   -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
@@ -97,6 +101,10 @@ main {
   touch-action: pan-y pan-x;
   height: 100vh;
   max-height: 100vh;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 /* Dashboard specific touch improvements */
@@ -107,6 +115,10 @@ main {
   touch-action: pan-y pan-x;
   height: 100%;
   min-height: 100vh;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 /* Raspberry Pi touchscreen specific improvements */
@@ -154,4 +166,30 @@ main {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
+}
+
+/* Additional touch scrolling improvements for all screen sizes */
+.space-y-6, .space-y-4, .space-y-2 {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action: pan-y pan-x;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure all grid layouts are touch-scrollable */
+.grid {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action: pan-y pan-x;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Make sure all div containers allow touch scrolling */
+div {
+  touch-action: pan-y pan-x;
+  -webkit-overflow-scrolling: touch;
 } 

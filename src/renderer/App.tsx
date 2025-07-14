@@ -22,7 +22,7 @@ export default function App() {
         <Header />
         <div className="flex flex-1 overflow-hidden">
           <Sidebar />
-          <main className="flex-1 p-6 overflow-y-auto overflow-x-auto" style={{ touchAction: 'pan-y pan-x' }}>
+          <main className="flex-1 p-6 overflow-y-auto overflow-x-auto scrollable" style={{ touchAction: 'pan-y pan-x' }}>
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/settings" element={<Settings />} />
