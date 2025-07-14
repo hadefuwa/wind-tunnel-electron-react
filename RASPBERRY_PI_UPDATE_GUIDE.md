@@ -102,6 +102,18 @@ git stash
 git pull origin main
 ```
 
+### If you get merge conflicts:
+```bash
+# Stash your local changes
+git stash
+
+# Pull the latest changes
+git pull origin main
+
+# If you want to reapply your changes later
+git stash pop
+```
+
 ### If npm install fails:
 ```bash
 # Clear npm cache
