@@ -42,8 +42,14 @@ app.commandLine.appendSwitch('--disable-accelerated-video-decode');
 // Raspberry Pi specific optimizations
 if (isPi) {
   console.log('🍓 Raspberry Pi detected - applying optimizations');
-  app.commandLine.appendSwitch('--disable-webgl'); // Disable WebGL on Pi for stability
-  app.commandLine.appendSwitch('--disable-webgl2');
+  // Only disable WebGL in headless mode, enable it for GUI mode
+  if (isHeadlessMode) {
+    app.commandLine.appendSwitch('--disable-webgl');
+    app.commandLine.appendSwitch('--disable-webgl2');
+  } else {
+    app.commandLine.appendSwitch('--enable-webgl');
+    app.commandLine.appendSwitch('--enable-webgl2');
+  }
   app.commandLine.appendSwitch('--disable-accelerated-compositing');
   app.commandLine.appendSwitch('--disable-accelerated-layers');
   app.commandLine.appendSwitch('--disable-accelerated-plugins');
@@ -97,8 +103,8 @@ function createWindow() {
       webSecurity: true,
       allowRunningInsecureContent: false,
       experimentalFeatures: false,
-      // Enable WebGL only on desktop
-      webgl: !isPi,
+      // Enable WebGL for desktop and Pi in GUI mode
+      webgl: !isPi || !isHeadlessMode,
     },
     show: false,
     // Raspberry Pi specific settings
