@@ -93,7 +93,7 @@ To get the latest updates on your Raspberry Pi:
 
 ```bash
 # Navigate to your project directory
-cd /path/to/wind-tunnel-electron-react
+cd /opt/wind-tunnel
 
 # Check current status
 git status
@@ -123,7 +123,7 @@ sudo nano /usr/local/bin/update-wind-tunnel.sh
 
 # Add this content:
 #!/bin/bash
-cd /path/to/wind-tunnel-electron-react
+cd /opt/wind-tunnel
 git pull origin main
 npm install
 npm run build
