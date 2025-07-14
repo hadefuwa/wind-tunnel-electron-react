@@ -59,11 +59,9 @@
 
 /* Touchscreen-friendly global styles */
 html, body, #root {
-  -webkit-user-select: none; /* Chrome/Safari */
-  -moz-user-select: none;    /* Firefox */
-  -ms-user-select: none;     /* IE10+ */
-  user-select: none;         /* Standard */
-  touch-action: pan-y pan-x; /* Allow scrolling */
+  /* Remove user-select: none to allow text selection and better touch interaction */
+  touch-action: manipulation; /* Better touch handling for buttons and interactive elements */
+  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
 }
 
 /* Allow text selection where needed */
@@ -76,7 +74,64 @@ html, body, #root {
 
 /* Touch-friendly scrollable area */
 .scrollable {
-  -webkit-overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
   overflow-y: auto;
+  touch-action: pan-y; /* Allow vertical scrolling */
+}
+
+/* Prevent text selection on buttons and interactive elements */
+button, input, select, textarea {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Ensure main content area is scrollable */
+main {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
+}
+
+/* Dashboard specific touch improvements */
+.dashboard-content {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  height: 100%;
+}
+
+/* Raspberry Pi touchscreen specific improvements */
+@media (pointer: coarse) {
+  /* Increase touch targets for better usability */
+  button, input, select, textarea {
+    min-height: 44px; /* Minimum touch target size */
+    min-width: 44px;
+  }
+  
+  /* Improve scrolling on touch devices */
+  .dashboard-content, main, .scrollable {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+  
+  /* Better touch feedback */
+  button:active, input:active, select:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Additional touch improvements for small screens */
+@media (max-width: 768px) {
+  .dashboard-content {
+    padding-bottom: 20px; /* Extra space for scrolling */
+  }
+  
+  /* Ensure tables are scrollable on touch */
+  table {
+    min-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 } 

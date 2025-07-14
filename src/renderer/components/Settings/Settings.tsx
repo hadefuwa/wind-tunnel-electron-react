@@ -45,7 +45,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 dashboard-content">
       {/* Header */}
       <div>
         <div className="flex items-center justify-between">

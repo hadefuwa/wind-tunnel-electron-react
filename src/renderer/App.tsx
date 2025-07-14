@@ -20,9 +20,9 @@ export default function App() {
     <Router>
       <div className="min-h-screen bg-background-900 text-white flex flex-col">
         <Header />
-        <div className="flex flex-1">
+        <div className="flex flex-1 overflow-hidden">
           <Sidebar />
-          <main className="flex-1 p-6">
+          <main className="flex-1 p-6 overflow-y-auto">
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/settings" element={<Settings />} />
