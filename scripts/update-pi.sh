@@ -58,8 +58,23 @@ npm run build
 
 if [ $? -ne 0 ]; then
     echo "❌ Failed to build the application"
+    echo "🔍 Running debug script to identify issues..."
+    chmod +x scripts/debug-build.sh
+    ./scripts/debug-build.sh
     exit 1
 fi
+
+# Verify the build
+echo "🔍 Verifying build..."
+if [ ! -f "dist/main/index.js" ]; then
+    echo "❌ dist/main/index.js not found after build"
+    echo "🔍 Running debug script..."
+    chmod +x scripts/debug-build.sh
+    ./scripts/debug-build.sh
+    exit 1
+fi
+
+echo "✅ Build verification successful"
 
 # Start the application
 echo "🚀 Starting the Wind Tunnel App..."
