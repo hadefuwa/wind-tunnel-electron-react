@@ -91,9 +91,16 @@ npm run dist:raspberry-pi     # Pi 3 (32-bit)
 
 To get the latest updates on your Raspberry Pi:
 
+**Note**: Your installation path may vary. Common paths are:
+- `/home/matrix/wind-tunnel-electron-react` (user installation)
+- `/opt/wind-tunnel` (system installation via install script)
+- `/home/pi/wind-tunnel-electron-react` (default Pi user)
+
+Replace the path below with your actual installation location:
+
 ```bash
 # Navigate to your project directory
-cd /opt/wind-tunnel
+cd /home/matrix/wind-tunnel-electron-react
 
 # Check current status
 git status
@@ -123,7 +130,7 @@ sudo nano /usr/local/bin/update-wind-tunnel.sh
 
 # Add this content:
 #!/bin/bash
-cd /opt/wind-tunnel
+cd /home/matrix/wind-tunnel-electron-react
 git pull origin main
 npm install
 npm run build
