@@ -66,23 +66,14 @@ export default function Dashboard() {
 
   return (
     <>
-      <div ref={scrollRef} className="space-y-8 content-scrollable" style={{overflowY: 'auto', maxHeight: '100vh', WebkitOverflowScrolling: 'touch', touchAction: 'pan-y'}}>
-        {/* Header - Made larger and more prominent */}
-        <div className="text-center py-8 dashboard-header">
-          <div className="flex flex-col items-center space-y-4">
-            <img 
-              src="/logo.png" 
-              alt="Wind Tunnel Logo" 
-              className="h-24 w-auto object-contain dashboard-logo"
-            />
-            <div>
-              <h1 className="text-5xl font-bold text-white mb-4 prominent-text">Wind Tunnel Dashboard</h1>
-              <p className="text-2xl text-background-400">Real-time aerodynamic data and visualization</p>
-            </div>
-          </div>
+      <div ref={scrollRef} className="space-y-6 p-6">
+        {/* Dashboard Title */}
+        <div className="text-center py-4">
+          <h1 className="text-3xl font-bold text-white mb-2">Dashboard</h1>
+          <p className="text-lg text-background-400">Real-time wind tunnel data and visualization</p>
         </div>
 
-        {/* Tab Navigation - Made larger */}
+        {/* Tab Navigation */}
         <div className="flex space-x-2 bg-background-800 rounded-xl p-2 enhanced-card">
           <button
             onClick={() => setActiveTab('main')}
@@ -122,8 +113,8 @@ export default function Dashboard() {
         {/* Tab Content */}
         {activeTab === 'main' && (
           <>
-            {/* Parameter Cards Grid - Made larger and more prominent */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Parameter Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {parameters.map((param, index) => (
                 <div
                   key={param.name}
@@ -137,38 +128,38 @@ export default function Dashboard() {
               ))}
             </div>
 
-            {/* System Status and Controls - Made larger */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* System Status and Controls */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* WebGL Status */}
               <WebGLStatusIndicator />
               
-              {/* Simulation Controls - Made larger */}
-              <div className="lg:col-span-2 bg-background-800 rounded-xl p-8 enhanced-card control-panel">
-                <div className="flex items-center justify-between mb-6">
+              {/* Simulation Controls */}
+              <div className="lg:col-span-2 bg-background-800 rounded-xl p-6 enhanced-card control-panel">
+                <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
-                    <h3 className="text-2xl font-semibold prominent-text">Simulation Controls</h3>
+                    <h3 className="text-xl font-semibold prominent-text">Simulation Controls</h3>
                     <InfoTooltip content="Control the wind tunnel simulation. Start to begin data collection, stop to pause." />
                   </div>
                   <div className="flex space-x-4">
                     <button
                       onClick={startSimulation}
                       disabled={isSimulationRunning}
-                      className="flex items-center px-6 py-3 bg-success-600 hover:bg-success-700 disabled:bg-success-800 disabled:cursor-not-allowed rounded-lg text-white font-medium transition-colors text-lg"
+                      className="flex items-center px-4 py-2 bg-success-600 hover:bg-success-700 disabled:bg-success-800 disabled:cursor-not-allowed rounded-lg text-white font-medium transition-colors"
                     >
-                      <PlayIcon className="h-6 w-6" />
+                      <PlayIcon className="h-5 w-5" />
                       <span className="ml-2">Start</span>
                     </button>
                     <button
                       onClick={stopSimulation}
                       disabled={!isSimulationRunning}
-                      className="flex items-center px-6 py-3 bg-error-600 hover:bg-error-700 disabled:bg-error-800 disabled:cursor-not-allowed rounded-lg text-white font-medium transition-colors text-lg"
+                      className="flex items-center px-4 py-2 bg-error-600 hover:bg-error-700 disabled:bg-error-800 disabled:cursor-not-allowed rounded-lg text-white font-medium transition-colors"
                     >
-                      <StopIcon className="h-6 w-6" />
+                      <StopIcon className="h-5 w-5" />
                       <span className="ml-2">Stop</span>
                     </button>
                   </div>
                 </div>
-                <div className="text-lg text-background-400">
+                <div className="text-background-400">
                   Status: {isSimulationRunning ? 'Running' : 'Stopped'} | 
                   Data Points: {dataHistory.length} | 
                   Last Update: {currentData ? new Date(currentData.timestamp).toLocaleTimeString() : 'N/A'}
@@ -176,9 +167,9 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Charts and Visualization - Made larger */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Real-time Charts - Made larger */}
+            {/* Charts and Visualization */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Real-time Charts */}
               <div className="space-y-6">
                 <div className="chart-container">
                   <RealTimeChart
@@ -200,9 +191,9 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              {/* 3D Visualization - Made larger */}
-              <div className="bg-background-800 rounded-xl p-8 enhanced-card chart-container">
-                <h3 className="text-2xl font-semibold mb-6 prominent-text">3D Visualization</h3>
+              {/* 3D Visualization */}
+              <div className="bg-background-800 rounded-xl p-6 enhanced-card chart-container">
+                <h3 className="text-xl font-semibold mb-4 prominent-text">3D Visualization</h3>
                 <div className="h-80">
                   <ErrorBoundary>
                     <WindTunnel3D className="h-full" />
@@ -211,28 +202,28 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Data Grid - Made larger */}
-            <div className="bg-background-800 rounded-xl p-8 enhanced-card data-table">
-              <h3 className="text-2xl font-semibold mb-6 prominent-text">Data Log</h3>
+            {/* Data Grid */}
+            <div className="bg-background-800 rounded-xl p-6 enhanced-card data-table">
+              <h3 className="text-xl font-semibold mb-4 prominent-text">Data Log</h3>
               <div className="overflow-x-auto">
-                <table className="w-full text-lg">
+                <table className="w-full">
                   <thead>
                     <tr className="border-b border-background-700">
-                      <th className="text-left py-4 text-background-400 font-semibold">Timestamp</th>
-                      <th className="text-left py-4 text-background-400 font-semibold">Drag Force (N)</th>
-                      <th className="text-left py-4 text-background-400 font-semibold">Lift Force (N)</th>
-                      <th className="text-left py-4 text-background-400 font-semibold">Wind Speed (m/s)</th>
-                      <th className="text-left py-4 text-background-400 font-semibold">Pressure (kPa)</th>
+                      <th className="text-left py-3 text-background-400 font-semibold">Timestamp</th>
+                      <th className="text-left py-3 text-background-400 font-semibold">Drag Force (N)</th>
+                      <th className="text-left py-3 text-background-400 font-semibold">Lift Force (N)</th>
+                      <th className="text-left py-3 text-background-400 font-semibold">Wind Speed (m/s)</th>
+                      <th className="text-left py-3 text-background-400 font-semibold">Pressure (kPa)</th>
                     </tr>
                   </thead>
                   <tbody>
                     {dataHistory.slice(-5).reverse().map((data: WindTunnelData, index: number) => (
                       <tr key={index} className="border-b border-background-700">
-                        <td className="py-4">{new Date(data.timestamp).toLocaleTimeString()}</td>
-                        <td className="py-4">{data.dragForce.toFixed(2)}</td>
-                        <td className="py-4">{data.liftForce.toFixed(2)}</td>
-                        <td className="py-4">{data.windSpeed.toFixed(1)}</td>
-                        <td className="py-4">{data.pressure.toFixed(1)}</td>
+                        <td className="py-3">{new Date(data.timestamp).toLocaleTimeString()}</td>
+                        <td className="py-3">{data.dragForce.toFixed(2)}</td>
+                        <td className="py-3">{data.liftForce.toFixed(2)}</td>
+                        <td className="py-3">{data.windSpeed.toFixed(1)}</td>
+                        <td className="py-3">{data.pressure.toFixed(1)}</td>
                       </tr>
                     ))}
                   </tbody>
