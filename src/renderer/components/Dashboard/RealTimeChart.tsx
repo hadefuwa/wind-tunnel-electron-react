@@ -11,7 +11,7 @@ import {
   ChartOptions,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { WindTunnelData } from '../../store/useAppStore';
+import { WindTunnelData } from '../../../shared/types/WindTunnelData';
 
 ChartJS.register(
   CategoryScale,
@@ -68,11 +68,11 @@ export default function RealTimeChart({
           data: values,
           borderColor: color,
           backgroundColor: color + '20',
-          borderWidth: 2,
+          borderWidth: 3,
           fill: false,
           tension: 0.4,
-          pointRadius: 2,
-          pointHoverRadius: 4,
+          pointRadius: 4,
+          pointHoverRadius: 8,
         },
       ],
     });
@@ -87,7 +87,8 @@ export default function RealTimeChart({
         labels: {
           color: '#e2e8f0',
           font: {
-            size: 12,
+            size: 16,
+            weight: 'bold',
           },
         },
       },
@@ -96,18 +97,25 @@ export default function RealTimeChart({
         text: title,
         color: '#e2e8f0',
         font: {
-          size: 14,
+          size: 20,
           weight: 'bold',
         },
       },
       tooltip: {
         mode: 'index',
         intersect: false,
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
         titleColor: '#e2e8f0',
         bodyColor: '#e2e8f0',
         borderColor: color,
-        borderWidth: 1,
+        borderWidth: 2,
+        titleFont: {
+          size: 16,
+          weight: 'bold',
+        },
+        bodyFont: {
+          size: 14,
+        },
       },
     },
     scales: {
@@ -117,13 +125,21 @@ export default function RealTimeChart({
           display: true,
           text: 'Time',
           color: '#94a3b8',
+          font: {
+            size: 16,
+            weight: 'bold',
+          },
         },
         ticks: {
           color: '#94a3b8',
           maxTicksLimit: 8,
+          font: {
+            size: 14,
+          },
         },
         grid: {
-          color: 'rgba(148, 163, 184, 0.1)',
+          color: 'rgba(148, 163, 184, 0.2)',
+          lineWidth: 1,
         },
       },
       y: {
@@ -132,12 +148,20 @@ export default function RealTimeChart({
           display: true,
           text: unit,
           color: '#94a3b8',
+          font: {
+            size: 16,
+            weight: 'bold',
+          },
         },
         ticks: {
           color: '#94a3b8',
+          font: {
+            size: 14,
+          },
         },
         grid: {
-          color: 'rgba(148, 163, 184, 0.1)',
+          color: 'rgba(148, 163, 184, 0.2)',
+          lineWidth: 1,
         },
       },
     },
@@ -150,13 +174,13 @@ export default function RealTimeChart({
       point: {
         hoverBackgroundColor: color,
         hoverBorderColor: '#ffffff',
-        hoverBorderWidth: 2,
+        hoverBorderWidth: 3,
       },
     },
   };
 
   return (
-    <div className="bg-background-800 rounded-lg p-4 h-64">
+    <div className="bg-background-800 rounded-xl p-6 h-80">
       <Line ref={chartRef} data={chartData} options={options} />
     </div>
   );

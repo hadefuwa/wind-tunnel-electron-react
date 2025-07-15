@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const path = require('path');
 const { defaultWebSocketService } = require('./services/WebSocketServer');
 const { exec } = require('child_process');
@@ -96,6 +96,9 @@ function createWindow() {
     minWidth: isPi ? 800 : 900,
     minHeight: isPi ? 600 : 600,
     backgroundColor: '#0f172a',
+    fullscreen: true, // Start in fullscreen
+    autoHideMenuBar: true, // Hide the menu bar
+    kiosk: isPi, // Kiosk mode for Raspberry Pi (prevents exit)
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -113,6 +116,25 @@ function createWindow() {
       resizable: true,
       maximizable: false, // Prevent memory issues
     }),
+  });
+
+  // Disable the menu completely
+  Menu.setApplicationMenu(null);
+
+  // Handle fullscreen toggle with F11
+  win.webContents.on('before-input-event', (event: any, input: any) => {
+    if (input.key === 'F11') {
+      win.setFullScreen(!win.isFullScreen());
+      event.preventDefault();
+    }
+    // Allow Ctrl+Q to quit in development
+    if (input.control && input.key === 'q' && isDev) {
+      app.quit();
+    }
+    // Allow Ctrl+R to reload in development
+    if (input.control && input.key === 'r' && isDev) {
+      win.reload();
+    }
   });
 
   if (isDev) {

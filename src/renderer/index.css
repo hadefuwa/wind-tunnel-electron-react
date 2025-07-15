@@ -34,12 +34,146 @@
   }
 }
 
+/* New animations for prominent dashboard */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 30px rgba(59, 130, 246, 0.6);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Enhanced dashboard styles */
+.dashboard-header {
+  animation: scaleIn 0.8s ease-out;
+}
+
+.parameter-card {
+  animation: fadeInUp 0.6s ease-out forwards;
+  transition: all 0.3s ease;
+}
+
+.parameter-card:hover {
+  animation: glow 2s ease-in-out infinite;
+  transform: translateY(-5px);
+}
+
+.chart-container {
+  animation: slideInRight 0.8s ease-out;
+  transition: all 0.3s ease;
+}
+
+.chart-container:hover {
+  transform: scale(1.02);
+}
+
+.control-panel {
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.data-table {
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+/* Prominent text styles */
+.prominent-text {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+}
+
+.prominent-value {
+  font-size: 3rem;
+  font-weight: 900;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Enhanced card styles */
+.enhanced-card {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.enhanced-card:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
 /* Smooth transitions for all interactive elements */
 * {
   transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
-/* Custom scrollbar */
+/* Fullscreen optimizations */
+html, body, #root {
+  /* Prevent text selection to improve touch scrolling */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action: pan-y pan-x; /* Allow both vertical and horizontal scrolling */
+  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  height: 100vh; /* Full viewport height */
+  width: 100vw; /* Full viewport width */
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent scrollbars */
+}
+
+/* Fullscreen app container */
+#root {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #0f172a; /* Match the app background */
+}
+
+/* Ensure main content area uses full screen */
+main {
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y pan-x;
+  flex: 1;
+  height: 100vh; /* Full viewport height */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  padding: 1.5rem;
+  background: #0f172a;
+}
+
+/* Remove any browser-like elements */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -57,21 +191,6 @@
   background: #64748b;
 }
 
-/* Touchscreen-friendly global styles */
-html, body, #root {
-  /* Prevent text selection to improve touch scrolling */
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  touch-action: pan-y pan-x; /* Allow both vertical and horizontal scrolling */
-  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
 /* Allow text selection where needed */
 .selectable {
   -webkit-user-select: text;
@@ -79,8 +198,6 @@ html, body, #root {
   -ms-user-select: text;
   user-select: text;
 }
-
-
 
 /* Prevent text selection on buttons and interactive elements */
 button, input, select, textarea {
@@ -104,8 +221,6 @@ main {
   user-select: none;
   padding: 1.5rem;
 }
-
-
 
 /* Raspberry Pi touchscreen specific improvements */
 @media (pointer: coarse) {
@@ -170,36 +285,40 @@ main {
 
 /* Ensure proper touch scrolling on all devices */
 html {
-  height: 100%;
+  height: 100vh;
+  width: 100vw;
   overflow: hidden;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
 }
 
 body {
-  height: 100%;
+  height: 100vh;
+  width: 100vw;
   margin: 0;
   padding: 0;
   overflow: hidden;
   position: fixed;
-  width: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #0f172a;
 }
 
 #root {
-  height: 100%;
+  height: 100vh;
+  width: 100vw;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  background: #0f172a;
 }
 
 /* Main app container */
 .min-h-screen {
   height: 100vh;
+  width: 100vw;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  background: #0f172a;
 }
 
 /* Flex container for sidebar and main content */
@@ -262,4 +381,15 @@ main.flex-1.content-scrollable {
 
 .touch-scroll-test:active {
   border-color: #f97316;
+} 
+
+/* Logo styling */
+.dashboard-logo {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  transition: all 0.3s ease;
+}
+
+.dashboard-logo:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
 } 
