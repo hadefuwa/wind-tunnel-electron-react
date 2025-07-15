@@ -1,7 +1,7 @@
-import { app, BrowserWindow, ipcMain, app as electronApp } from 'electron';
-import * as path from 'path';
-import { defaultWebSocketService } from './services/WebSocketServer';
-import { exec } from 'child_process';
+const { app, BrowserWindow, ipcMain } = require('electron');
+const path = require('path');
+const { defaultWebSocketService } = require('./services/WebSocketServer');
+const { exec } = require('child_process');
 
 // Move all commandLine switches here, right after importing 'app'
 app.commandLine.appendSwitch('--disable-gpu-sandbox');

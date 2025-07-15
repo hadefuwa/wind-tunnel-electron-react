@@ -54,7 +54,7 @@ export default function App() {
         <Header />
         <div className="flex flex-1 overflow-hidden">
           <Sidebar collapsed={sidebarCollapsed} onToggle={toggleSidebar} />
-          <main 
+          <main
             className="flex-1 content-scrollable transition-all duration-300"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
