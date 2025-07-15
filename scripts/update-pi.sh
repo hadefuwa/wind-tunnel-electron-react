@@ -1,106 +1,55 @@
 #!/bin/bash
 
-# Wind Tunnel App - Raspberry Pi Update Script
-# This script pulls the latest changes from GitHub and restarts the application
+# Wind Tunnel App Update Script for Raspberry Pi
+# This script updates the app and ensures no test content is shown
 
-echo "🔄 Starting Wind Tunnel App update on Raspberry Pi..."
+set -e
 
-# Navigate to the project directory
-# Updated to use matrix user's home directory
-PROJECT_DIR="/home/matrix/wind-tunnel-electron-react"
+echo "🍓 Updating Wind Tunnel App..."
 
-if [ ! -d "$PROJECT_DIR" ]; then
-    echo "❌ Project directory not found at $PROJECT_DIR"
-    echo "Please update the PROJECT_DIR variable in this script to match your Pi's project location"
-    exit 1
-fi
+# Stop the current service
+echo "🛑 Stopping current service..."
+sudo systemctl stop wind-tunnel-app || true
 
-cd "$PROJECT_DIR"
-
-echo "📁 Working directory: $(pwd)"
-
-# Check if git repository exists
-if [ ! -d ".git" ]; then
-    echo "❌ Git repository not found. Please clone the repository first:"
-    echo "git clone <your-repo-url> ."
-    exit 1
-fi
-
-# Stop any running instances of the app
-echo "🛑 Stopping any running instances..."
-pkill -f "wind-tunnel-electron" || true
+# Kill any remaining Electron processes
+echo "🔪 Killing any remaining Electron processes..."
+pkill -f "wind-tunnel-app" || true
 pkill -f "electron" || true
 
-# Pull latest changes from GitHub
-echo "⬇️  Pulling latest changes from GitHub..."
-git fetch origin
-git pull origin main
+# Wait a moment
+sleep 2
 
-if [ $? -ne 0 ]; then
-    echo "❌ Failed to pull changes from GitHub"
-    exit 1
-fi
+# Copy updated files to system directory
+echo "📁 Copying updated files..."
+sudo cp -r * /opt/wind-tunnel-app/
 
-echo "✅ Successfully pulled latest changes"
+# Set proper ownership
+echo "👤 Setting ownership..."
+sudo chown -R matrix:matrix /opt/wind-tunnel-app/
 
-# Install/update dependencies
-echo "📦 Installing/updating dependencies..."
-npm install
-
-if [ $? -ne 0 ]; then
-    echo "❌ Failed to install dependencies"
-    exit 1
-fi
+# Make sure the start script is executable
+echo "🔧 Making start script executable..."
+sudo chmod +x /opt/wind-tunnel-app/start.sh
 
 # Build the application
-echo "🔨 Building the application..."
+echo "🔨 Building application..."
+cd /opt/wind-tunnel-app
 npm run build
 
-if [ $? -ne 0 ]; then
-    echo "❌ Failed to build the application"
-    echo "🔧 Running fix script..."
-    chmod +x scripts/fix-build.sh
-    ./scripts/fix-build.sh
-    if [ $? -ne 0 ]; then
-        echo "❌ Fix script failed"
-        echo "🔍 Running debug script to identify issues..."
-        chmod +x scripts/debug-build.sh
-        ./scripts/debug-build.sh
-        exit 1
-    fi
-fi
-
-# Verify the build
-echo "🔍 Verifying build..."
-if [ ! -f "dist/main/index.js" ]; then
-    echo "❌ dist/main/index.js not found after build"
-    echo "🔧 Running fix script..."
-    chmod +x scripts/fix-build.sh
-    ./scripts/fix-build.sh
-    if [ $? -ne 0 ]; then
-        echo "❌ Fix script failed"
-        echo "🔍 Running debug script..."
-        chmod +x scripts/debug-build.sh
-        ./scripts/debug-build.sh
-        exit 1
-    fi
-fi
-
-echo "✅ Build verification successful"
-
-# Start the application
-echo "🚀 Starting the Wind Tunnel App..."
-npm start &
+# Start the service
+echo "🚀 Starting updated service..."
+sudo systemctl start wind-tunnel-app
 
 # Wait a moment for the app to start
 sleep 3
 
 # Check if the app is running
-if pgrep -f "wind-tunnel-electron" > /dev/null; then
-    echo "✅ Wind Tunnel App is now running!"
-    echo "📱 Touchscreen scrolling should now work properly"
+if pgrep -f "wind-tunnel-app" > /dev/null; then
+    echo "✅ Wind Tunnel App is now running with updated version!"
+    echo "🎉 Test content should be completely removed!"
 else
-    echo "⚠️  App may not have started properly. Check the logs above."
+    echo "⚠️  App may not have started properly. Check the logs:"
+    echo "   sudo journalctl -u wind-tunnel-app -f"
 fi
 
 echo "🎉 Update complete!" 
