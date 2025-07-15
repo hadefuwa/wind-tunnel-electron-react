@@ -63,6 +63,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
+    "@types/hammerjs": "^2.0.45",
     "@types/serialport": "^8.0.2",
     "@types/sqlite3": "^3.1.11",
     "@types/three": "^0.158.3",
@@ -82,7 +83,7 @@
     "tailwindcss": "^3.3.6",
     "three": "^0.158.0",
     "uuid": "^9.0.1",
-
+    "hammerjs": "^2.0.8",
     "ws": "^8.18.3",
     "zustand": "^4.4.7"
   },
