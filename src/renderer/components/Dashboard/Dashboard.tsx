@@ -11,6 +11,7 @@ import { DashboardSkeleton } from './LoadingSkeleton';
 import { InfoTooltip } from '../UI/Tooltip';
 import { WebGLStatusIndicator } from '../UI/WebGLStatusIndicator';
 import { TouchScrollTest } from '../UI/TouchScrollTest';
+import Hammer from 'hammerjs';
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<'main' | 'analytics' | 'data'>('main');
@@ -23,6 +24,21 @@ export default function Dashboard() {
     startSimulation, 
     stopSimulation 
   } = useAppStore();
+
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (!scrollRef.current) return;
+    const hammer = new Hammer(scrollRef.current);
+    hammer.get('swipe').set({ direction: Hammer.DIRECTION_VERTICAL });
+    hammer.on('swipeup', () => {
+      scrollRef.current!.scrollTop += 100;
+    });
+    hammer.on('swipedown', () => {
+      scrollRef.current!.scrollTop -= 100;
+    });
+    return () => hammer.destroy();
+  }, []);
 
   // Show loading skeleton if no data is available
   if (!currentData && dataHistory.length === 0) {
@@ -38,7 +54,7 @@ export default function Dashboard() {
     { name: 'Temperature', value: currentData.temperature.toFixed(1), unit: '°C', trend: 'stable' as const, color: 'info' as const },
   ] : [];
   return (
-    <div className="space-y-6 content-scrollable">
+    <div ref={scrollRef} className="space-y-6 content-scrollable" style={{overflowY: 'auto', maxHeight: '100vh', WebkitOverflowScrolling: 'touch', touchAction: 'pan-y'}}>
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-white">Dashboard</h1>

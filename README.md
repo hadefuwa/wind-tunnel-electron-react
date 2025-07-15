@@ -356,3 +356,23 @@ If you encounter any issues or have questions:
 ---
 
 **Ready for production use on desktop and Raspberry Pi!** 🚀🍓 
+
+---
+
+## Touchscreen Scrolling Support (Raspberry Pi)
+
+**New in this version:**
+- The Dashboard now supports touchscreen swipe scrolling using [Hammer.js](https://hammerjs.github.io/).
+- Swipe up or down on the Dashboard to scroll the content on Raspberry Pi touchscreens.
+- This is especially useful for kiosk/touchscreen deployments where native touch scrolling is not reliable in Electron.
+
+**How it works:**
+- Hammer.js is used to detect vertical swipe gestures.
+- When you swipe up or down, the Dashboard content scrolls accordingly.
+- You can extend this to other components by following the same pattern (see `Dashboard.tsx`).
+
+**To enable or update:**
+1. Make sure you have run `npm install hammerjs` on your Raspberry Pi.
+2. Rebuild and redeploy the app as usual.
+
+--- 
