@@ -130,7 +130,7 @@ function createWindow() {
     win.webContents.setBackgroundThrottling(false);
     
     // Handle low memory situations
-    app.on('render-process-gone', (event, webContents, details) => {
+    app.on('render-process-gone', (event: any, webContents: any, details: any) => {
       console.log('Render process gone:', details.reason);
       if (details.reason === 'oom') {
         console.log('Out of memory detected - restarting window');
@@ -179,7 +179,7 @@ ipcMain.handle('run-update-script', async () => {
 
     // Try to run the update script
     const updateScript = '/usr/local/bin/update-wind-tunnel.sh';
-    exec(`sudo ${updateScript}`, (err, stdout, stderr) => {
+    exec(`sudo ${updateScript}`, (err: any, stdout: any, stderr: any) => {
       if (err) {
         // If script doesn't exist, provide manual instructions
         return reject(`Update script not found. Please run manually:\ncd /home/matrix/wind-tunnel-electron-react\ngit pull origin main\nnpm install\nnpm run build\nsudo systemctl restart wind-tunnel`);
@@ -208,10 +208,10 @@ ipcMain.handle('run-manual-update', async () => {
     ].join(' && ');
 
     // Open a new terminal with the commands
-    exec(`gnome-terminal -- bash -c "${commands}; read -p 'Press Enter to close...'"`, (err, stdout, stderr) => {
+    exec(`gnome-terminal -- bash -c "${commands}; read -p 'Press Enter to close...'"`, (err: any, stdout: any, stderr: any) => {
       if (err) {
         // Fallback: try xterm
-        exec(`xterm -e "bash -c '${commands}; read -p \"Press Enter to close...\"'"`, (err2, stdout2, stderr2) => {
+        exec(`xterm -e "bash -c '${commands}; read -p \"Press Enter to close...\"'"`, (err2: any, stdout2: any, stderr2: any) => {
           if (err2) {
             // Last resort: just show the commands
             resolve(`Please run these commands in terminal:\n\n${commands}`);
